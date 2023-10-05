@@ -106,21 +106,21 @@ public class Game {
 		return this.level;
 	}
 	
-	public void none() {
-		return;
+	public boolean none() {
+		return true;
 	}
 	
-	public void list() {
-		return;
+	public boolean list() {
+		return true;
 	}
 	
-	public void reset() {
-		return;
+	public boolean reset() {
+		return true;
 	}
 	
-	public void help() {
+	public boolean help() {
 		System.out.println(Messages.HELP);
-		this.updateBoard = false;
+		return false;
 	}	
 	
 	public boolean running() {
@@ -139,28 +139,31 @@ public class Game {
 		this.updateBoard = false;
 	}
 	
-	public void exit() {
+	public boolean exit() {
 		this.running = false;
-		return;
+		return false;
 	}
 	
-	public void shockwave() {
-		return;
+	public boolean shockwave() {
+		return true;
 	}
 	
-	public void shoot() {
+	public boolean shoot() {
 		if (laser) {
 			Controller.commandError();
+			return true;
 		} else {
 			entities.add(new UCMLaser(player, this));
+			return true;
 		}
 	}
 	
-	public void remove(Object entity) {
+	public boolean remove(Object entity) {
 		entities.remove(entity);
+		return true;
 	}
 	
-	public void move(String direction) {
+	public boolean move(String direction) {
 		Move move = switch (direction) {
 	    case "right" -> Move.RIGHT;
 	    case "rright" -> Move.RRIGHT;
@@ -171,9 +174,15 @@ public class Game {
 	    case "none" -> Move.NONE;
 	    default -> null;
 		};
-		update(player.getPosition(),  null);
-		Position.updateSafe(player.getPosition(), move);
+		update(player.getPosition(), null);
+		boolean result = Position.updateSafe(player.getPosition(), move);
 		update(player.getPosition(), player);
+		return result;
+//		if (move == null) {
+//			return false;
+//		} else {
+//			return true;
+//		}
 	}
 	
 	private void update(Position position, Entity entity) {
