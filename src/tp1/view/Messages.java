@@ -82,7 +82,7 @@ public class Messages {
 	
 	public static final String SCORE = "Score:";
 	
-	static final String LASER_ERROR = "Laser cannot be shot";
+	public static final String LASER_ERROR = "Laser cannot be shot";
 
 	public static final String SHOCKWAVE_ERROR = "ShockWave cannot be shot";
 	

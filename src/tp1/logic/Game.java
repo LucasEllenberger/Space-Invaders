@@ -150,7 +150,7 @@ public class Game {
 	
 	public boolean shoot() {
 		if (laser) {
-			Controller.commandError();
+			System.out.println(Messages.LASER_ERROR);
 			return true;
 		} else {
 			entities.add(new UCMLaser(player, this));
