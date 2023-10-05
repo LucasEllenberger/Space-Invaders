@@ -27,6 +27,7 @@ public class Game {
 	private boolean laser = false;
 	private Level level;
 	private Random random;
+	private boolean updateBoard = true;
 
 	//TODO fill your code
 
@@ -64,11 +65,15 @@ public class Game {
 
 	public boolean playerWin() {
 		//TODO fill your code
+		System.out.print(Messages.PLAYER_WINS);
+		System.exit(0);
 		return false;
 	}
 
 	public boolean aliensWin() {
 		//TODO fill your code
+		System.out.print(Messages.ALIENS_WIN);
+		System.exit(0);
 		return false;
 	}
 
@@ -104,10 +109,23 @@ public class Game {
 	}
 	
 	public void help() {
-		System.out.println(Messages.HELP_LINES);
+		System.out.println(Messages.HELP);
+		this.updateBoard = false;
+		// TODO don't draw the board again
+		// don't increment game cycle
 	}	
 	
+	public boolean checkUpdate() {
+		return updateBoard;
+	}
+	
+	public void updateBoard() {
+		this.updateBoard = true;
+	}
+	
 	public void exit() {
+		System.out.print(Messages.PLAYER_QUITS);
+		System.exit(0);
 		return;
 	}
 	

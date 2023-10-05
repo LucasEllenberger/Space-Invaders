@@ -44,10 +44,15 @@ public class Controller {
 	 */
 	public void run() {
 		//TODO fill your code
+		printGame();
 		while (true) {
-			printGame();
 			handler(prompt());
-			game.next();
+			if (game.checkUpdate()) {
+				game.next();
+				printGame();
+			} else {
+				game.updateBoard();
+			}
 		}
 	}
 
