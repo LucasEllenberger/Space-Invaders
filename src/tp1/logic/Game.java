@@ -59,8 +59,8 @@ public class Game {
 
 	public String positionToString(int col, int row) {
 		//TODO fill your code
-		if (entities.contains(board[row][col])) {
-			return board[row][col].getSymbol();
+		if (board[row][col] != null) {
+			return board[row][col].getSymbol(); 
 		}
 		return Messages.EMPTY;
 	}
