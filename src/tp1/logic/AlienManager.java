@@ -35,6 +35,15 @@ public class AlienManager {
 	 */
 	protected RegularAlienList initializeRegularAliens() {
 		//TODO fill your code
+		if (this.level == Level.EASY) {
+			System.out.print("found easy");
+		} else if (this.level == Level.HARD) {
+			System.out.print("found hard");
+		} else if (this.level == Level.INSANE){
+			System.out.print("found insane");
+		} else {
+			System.out.print("ERROR: RegularAlianList(): checking level difficulty");
+		}
 		return null;
 	}
 

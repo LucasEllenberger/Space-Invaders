@@ -25,6 +25,8 @@ public class Game {
 	private int cycles = 0;
 	private int points = 0;
 	private boolean laser = false;
+	private Level level;
+	private Random random;
 
 	//TODO fill your code
 
@@ -33,7 +35,8 @@ public class Game {
         Position position = player.getPosition();
         board[position.getRow()][position.getCol()] = player;
         entities.add(player);
-        
+        this.level = level;
+        this.random = new Random(seed);
 	}
 
 	public String stateToString() {
@@ -80,12 +83,12 @@ public class Game {
 
 	public Random getRandom() {
 		//TODO fill your code
-		return null;
+		return this.random;
 	}
 
 	public Level getLevel() {
 		//TODO fill your code
-		return null;
+		return this.level;
 	}
 	
 	public void none() {
