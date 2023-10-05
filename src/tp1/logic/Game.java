@@ -28,6 +28,7 @@ public class Game {
 	private Level level;
 	private Random random;
 	private boolean updateBoard = true;
+	private boolean running = true;
 
 	//TODO fill your code
 
@@ -52,6 +53,7 @@ public class Game {
 
 	public int getRemainingAliens() {
 		//TODO fill your code
+		// ask Alien manager for remaining aliens
 		return 0;
 	}
 
@@ -65,15 +67,23 @@ public class Game {
 
 	public boolean playerWin() {
 		//TODO fill your code
-		System.out.print(Messages.PLAYER_WINS);
-		System.exit(0);
+		// need to know if all the aliens are dead
+//		if (game.getRemainingAliens() == 0) {
+//		this.running = false;
+//			return true;
+//		}
 		return false;
 	}
 
 	public boolean aliensWin() {
 		//TODO fill your code
-		System.out.print(Messages.ALIENS_WIN);
-		System.exit(0);
+		// need to return true when UCM health == 0
+//		if (UCMShip.health == 0) {
+//			this.running = false;
+//			return true;
+//		} else {
+//			return false;
+//		}
 		return false;
 	}
 
@@ -111,21 +121,26 @@ public class Game {
 	public void help() {
 		System.out.println(Messages.HELP);
 		this.updateBoard = false;
-		// TODO don't draw the board again
-		// don't increment game cycle
 	}	
 	
-	public boolean checkUpdate() {
+	public boolean running() {
+		return this.running;
+	}
+	
+	public boolean update() {
 		return updateBoard;
 	}
 	
-	public void updateBoard() {
+	public void enableUpdate() {
 		this.updateBoard = true;
 	}
 	
+	public void disableUpdate() {
+		this.updateBoard = false;
+	}
+	
 	public void exit() {
-		System.out.print(Messages.PLAYER_QUITS);
-		System.exit(0);
+		this.running = false;
 		return;
 	}
 	

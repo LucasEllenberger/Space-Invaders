@@ -55,6 +55,9 @@ public class AlienManager {
 //		//TODO fill your code
 //	}
 
+	public int getRemainingAliens() {
+		return this.remainingAliens;
+	}
 	
 	// CONTROL METHODS
 		
