@@ -59,8 +59,8 @@ public class Game {
 
 	public String positionToString(int col, int row) {
 		//TODO fill your code
-		if (entities.contains(board[row][col])) {
-			return board[row][col].getSymbol();
+		if (board[row][col] != null) {
+			return board[row][col].getSymbol(); 
 		}
 		return Messages.EMPTY;
 	}
@@ -171,7 +171,7 @@ public class Game {
 	    case "none" -> Move.NONE;
 	    default -> null;
 		};
-		update(player.getPosition(), null);
+		update(player.getPosition(),  null);
 		Position.updateSafe(player.getPosition(), move);
 		update(player.getPosition(), player);
 	}
