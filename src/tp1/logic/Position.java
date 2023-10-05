@@ -1,6 +1,7 @@
 package tp1.logic;
 
 import tp1.control.Controller;
+import tp1.view.Messages;
 
 /**
  * 
@@ -40,13 +41,15 @@ public class Position {
 		return false;
 	}
 	
-	public static void updateSafe(Position position, Move move) {
+	public static boolean updateSafe(Position position, Move move) {
 		int newRow = position.getRow() + move.getY();
 		int newCol = position.getCol() + move.getX();
 		if (newRow < 0 || newCol < 0 || newRow >= Game.DIM_Y || newRow >= Game.DIM_X) {
-			Controller.commandError();
+			System.out.println(Messages.MOVEMENT_ERROR);
+			return false;
 		} else {
 			position.set(newRow, newCol);
+			return true;
 		}
 	}
 	public static void update(Position position, Move move) {

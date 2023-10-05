@@ -17,6 +17,7 @@ public class Controller {
 	private Game game;
 	private Scanner scanner;
 	private GamePrinter printer;
+	// private boolean result;
 
 	public Controller(Game game, Scanner scanner) {
 		this.game = game;
@@ -45,16 +46,17 @@ public class Controller {
 	public void run() {
 		//TODO fill your code
 		printGame();
+		boolean result = true;
 		while (game.running()) {
-			new_handler(prompt());
+			result = new_handler(prompt());
 			// checkUpdate will be false when the command doesn't require a board update
 			// used in help command
-			if (game.update()) {
+			if (result) {
 				game.next();
 				printGame();
-			} else { 			// reset the boolean to update the board next cycle
-				game.enableUpdate();
-			}
+			} // else { 			// reset the boolean to update the board next cycle
+//				game.enableUpdate();
+//			}
 		}
 		System.out.print(printer.endMessage());
 	}
@@ -76,11 +78,11 @@ public class Controller {
 	/**
 	 * Command parsing and validation
 	 */
-	private void new_handler(String[] command) {
+	private boolean new_handler(String[] command) {
 		if (command.length == 0) {
-			game.none();
+			return game.none();
 		} else {
-			switch (command[0].toLowerCase()) {
+			return switch (command[0].toLowerCase()) {
 			    case "n", "none" -> game.none();
 			    case "w", "shockwave" -> game.shockwave();
 			    case "s", "shoot" -> game.shoot();
@@ -89,21 +91,31 @@ public class Controller {
 			    case "h", "help" -> game.help();
 			    case "e", "exit" -> game.exit();
 			    case "m", "move" -> moveHandler(command);
-			    default -> System.out.println(Messages.INVALID_COMMAND);
-			}
+			    default -> errorHandler(Messages.INVALID_COMMAND);
+			};
 		}
 	}
 
-	private void moveHandler(String[] command) {
+	private boolean moveHandler(String[] command) {
 		if (command.length < 2) {
-			System.out.println(Messages.INVALID_COMMAND);
+			return errorHandler(Messages.INVALID_COMMAND);
 		} else {
-			switch (command[1].toLowerCase()) {
+			return switch (command[1].toLowerCase()) {
 			case "lleft", "left", "right", "rright", "up", "down", "none" -> game.move(command[1].toLowerCase());
-			default -> System.out.println(Messages.INVALID_COMMAND);
-			}
+			default -> invalidMovement(command[1]);
+			};
 		}
-		
+	}
+	
+	private boolean errorHandler(String message) {
+		System.out.println(message);
+		return false;
+	}
+	
+	private boolean invalidMovement(String movement) {
+		System.out.print(Messages.DIRECTION_ERROR);
+		System.out.println(movement);
+		return false;
 	}
 
 //	private void handler(String[] command) {
