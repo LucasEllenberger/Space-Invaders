@@ -20,6 +20,7 @@ public class Game {
 	public static final int DIM_X = 9;
 	public static final int DIM_Y = 8;
 	private Entity[][] board = new Entity[DIM_Y][DIM_X];
+	private Entity[][] other_board = new Entity[DIM_Y][DIM_X];
 	private Set<Entity> entities = new HashSet<Entity>();
 	private UCMShip player = new UCMShip();
 	private int cycles = 0;
@@ -61,6 +62,9 @@ public class Game {
 		//TODO fill your code
 		if (board[row][col] != null) {
 			return board[row][col].getSymbol(); 
+		}
+		if (other_board[row][col] != null) { 
+			return other_board[row][col].getSymbol();
 		}
 		return Messages.EMPTY;
 	}
@@ -153,7 +157,10 @@ public class Game {
 			System.out.println(Messages.LASER_ERROR);
 			return true;
 		} else {
-			entities.add(new UCMLaser(player, this));
+			UCMLaser curr_laser = new UCMLaser(player, this);
+			Position laser_position = curr_laser.getPosition();
+	        other_board[laser_position.getRow()][laser_position.getCol()] = curr_laser;
+	        entities.add(curr_laser);
 			return true;
 		}
 	}
@@ -174,9 +181,9 @@ public class Game {
 	    case "none" -> Move.NONE;
 	    default -> null;
 		};
-		update(player.getPosition(), null);
+		update(player.getPosition(), null, true);
 		boolean result = Position.updateSafe(player.getPosition(), move);
-		update(player.getPosition(), player);
+		update(player.getPosition(), player, true);
 		return result;
 //		if (move == null) {
 //			return false;
@@ -185,8 +192,11 @@ public class Game {
 //		}
 	}
 	
-	private void update(Position position, Entity entity) {
-	    board[position.getRow()][position.getCol()] = entity;
+	private void update(Position position, Entity entity, boolean original) {
+	    if (original)
+	    	board[position.getRow()][position.getCol()] = entity;
+	    else
+	    	other_board[position.getRow()][position.getCol()] = entity;
 	}
 	
 	public void next(){

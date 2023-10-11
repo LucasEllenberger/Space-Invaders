@@ -28,7 +28,10 @@ public class UCMLaser implements Entity{
 		return Messages.LASER_SYMBOL;
 	}
 
-
+	public Position getPosition() {
+		return position;
+	}
+	
 	/**
 	 *  Method called when the laser disappears from the board
 	 */
@@ -65,7 +68,7 @@ public class UCMLaser implements Entity{
 
 	private void performMovement(Move dir) {
 		//TODO fill your code
-		Position.update(position, dir);	
+		Position.update(position, dir);
 	}
 
 	/**
