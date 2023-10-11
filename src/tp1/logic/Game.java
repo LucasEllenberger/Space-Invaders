@@ -23,6 +23,7 @@ public class Game {
 	private Entity[][] other_board = new Entity[DIM_Y][DIM_X];
 	private Set<Entity> entities = new HashSet<Entity>();
 	private UCMShip player = new UCMShip();
+	private UCMLaser curr_laser = null;
 	private int cycles = 0;
 	private int points = 0;
 	private boolean laser = false;
@@ -157,11 +158,10 @@ public class Game {
 			System.out.println(Messages.LASER_ERROR);
 			return false;
 		} else {
-			UCMLaser curr_laser = new UCMLaser(player, this);
+			curr_laser = new UCMLaser(player, this);
 			Position laser_position = curr_laser.getPosition();
 	        other_board[laser_position.getRow()][laser_position.getCol()] = curr_laser;
 	        entities.add(curr_laser);
-	        laser = true;
 			return true;
 		}
 	}
@@ -202,5 +202,13 @@ public class Game {
 	
 	public void next(){
 		cycles += 1;
+		if (laser) {
+			update(curr_laser.getPosition(), null, false);
+			boolean still_in = curr_laser.automaticMove();
+			if (still_in)
+				update(curr_laser.getPosition(), curr_laser, false);
+			// TODO check if the move made it collide with something
+			// need to see if it attacks anything
+		}
 	}
 }

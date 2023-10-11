@@ -20,7 +20,7 @@ public class UCMLaser implements Entity{
 	
 	public UCMLaser(UCMShip ship, Game game) {
 		this.game = game;
-		this.position = ship.getPosition();
+		this.position = new Position(ship.getPosition().getCol(), ship.getPosition().getRow());
 		game.disableLaser();
 	}
 	
@@ -42,10 +42,13 @@ public class UCMLaser implements Entity{
 	/**
 	 *  Implements the automatic movement of the laser	
 	 */
-	public void automaticMove () {
+	public boolean automaticMove () {
 		performMovement(dir);
-		if(isOut())
+		if(isOut()) {
 			die();
+			return false;
+		}
+		return true;
 	}
 
 	
