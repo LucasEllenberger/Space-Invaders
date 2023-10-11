@@ -44,7 +44,7 @@ public class Position {
 	public static boolean updateSafe(Position position, Move move) {
 		int newRow = position.getRow() + move.getY();
 		int newCol = position.getCol() + move.getX();
-		if (newRow < 0 || newCol < 0 || newRow >= Game.DIM_Y || newRow >= Game.DIM_X) {
+		if (newRow < 0 || newCol < 0 || newRow >= Game.DIM_Y || newCol >= Game.DIM_X) {
 			System.out.println(Messages.MOVEMENT_ERROR);
 			return false;
 		} else {
@@ -57,9 +57,4 @@ public class Position {
 		int newCol = position.getCol() + move.getX();
 		position.set(newRow, newCol);
  	}
-	
-
-	
-	
-
 }
