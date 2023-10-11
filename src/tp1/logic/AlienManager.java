@@ -37,6 +37,7 @@ public class AlienManager {
 		//TODO fill your code
 		if (this.level == Level.EASY) {
 			System.out.print("found easy");
+			
 		} else if (this.level == Level.HARD) {
 			System.out.print("found hard");
 		} else if (this.level == Level.INSANE){
@@ -70,6 +71,8 @@ public class AlienManager {
 
 	public boolean onBorder() {
 		// TODO Auto-generated method stub
+		// iterate over each ship and check if one is on the boarder
+		// then you can return true, else return false
 		return false;
 	}
 

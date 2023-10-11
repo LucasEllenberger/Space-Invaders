@@ -32,10 +32,18 @@ public class Position {
 		this.col = col;
 	}
 	
+	public static boolean onBorder(Position position) {
+		int col = position.getCol();
+		if (col == 0 || col == Game.DIM_X) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean outside(Position position) {
 		int row = position.getRow();
 		int col = position.getCol();
-		if (row < 0 || col < 0 || row >= Game.DIM_Y || row >= Game.DIM_X) {
+		if (row < 0 || col < 0 || row >= Game.DIM_Y || col >= Game.DIM_X) {
 			return true;
 		} 
 		return false;
