@@ -13,7 +13,24 @@ public class RegularAlienList {
 
 	private RegularAlien[] objects;
 	private int num;
+	private int pointer = 0;
 	
 	//TODO fill your code
+	public RegularAlienList(int numAliens) {
+		objects = new RegularAlien[numAliens];
+		num = numAliens;
+	}
+	
+	public boolean addAlien(RegularAlien alien) {
+		if (objects == null) {
+			return false;
+		}
+		if (pointer < num) {
+			objects[pointer] = alien;
+			pointer++;
+			return true;
+		}
+		return false;
+	}
 
 }

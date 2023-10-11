@@ -20,11 +20,13 @@ public class AlienManager {
 	private boolean squadInFinalRow;
 	private int shipsOnBorder;
 	private boolean onBorder;
+	private RegularAlienList alienList;
 
 	public AlienManager(Game game, Level level) {
 		this.level = level;
 		this.game = game;
 		this.remainingAliens = 0;
+		this.alienList = initializeRegularAliens();
 	}
 		
 	// INITIALIZER METHODS
@@ -36,16 +38,36 @@ public class AlienManager {
 	protected RegularAlienList initializeRegularAliens() {
 		//TODO fill your code
 		if (this.level == Level.EASY) {
-			System.out.print("found easy");
-			
-		} else if (this.level == Level.HARD) {
-			System.out.print("found hard");
+			alienList = new RegularAlienList(4);
+			populateAlienRow(1, 3);
+		} else if (this.level == Level.HARD || this.level == Level.INSANE) {
+			alienList = new RegularAlienList(8);
+			populateAlienRow(1, 2);
+			populateAlienRow(2, 2);
 		} else if (this.level == Level.INSANE){
-			System.out.print("found insane");
+			alienList = new RegularAlienList(8);
+			populateAlienRow(1, 1);
+			populateAlienRow(2, 1);
 		} else {
 			System.out.print("ERROR: RegularAlianList(): checking level difficulty");
 		}
-		return null;
+		return alienList;
+	}
+	
+	private boolean populateAlienRow(int col, int speed) {
+		boolean flag = true;
+		for (int i = 0; i < 4; i++) {
+			Position temp_pos = new Position(2+i, col);
+			RegularAlien temp_alien = new RegularAlien(this, temp_pos, speed);
+			boolean check = alienList.addAlien(temp_alien);
+			if (!check) {
+				System.out.println("Error initializing aliens");
+				flag = false;
+			} else {
+				remainingAliens++;
+			}
+		}
+		return flag;
 	}
 
 	/**

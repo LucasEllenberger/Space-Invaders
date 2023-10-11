@@ -24,6 +24,7 @@ public class Game {
 	private Set<Entity> entities = new HashSet<Entity>();
 	private UCMShip player = new UCMShip();
 	private UCMLaser curr_laser = null;
+	private AlienManager aliens;
 	private int cycles = 0;
 	private int points = 0;
 	private boolean laser = false;
@@ -41,6 +42,8 @@ public class Game {
         entities.add(player);
         this.level = level;
         this.random = new Random(seed);
+        aliens = new AlienManager(this, level);
+        
 	}
 
 	public String stateToString() {
@@ -56,7 +59,7 @@ public class Game {
 	public int getRemainingAliens() {
 		//TODO fill your code
 		// ask Alien manager for remaining aliens
-		return 0;
+		return aliens.getRemainingAliens();
 	}
 
 	public String positionToString(int col, int row) {
