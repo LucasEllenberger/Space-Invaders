@@ -40,7 +40,7 @@ public class AlienManager {
 		if (this.level == Level.EASY) {
 			alienList = new RegularAlienList(4);
 			populateAlienRow(1, 3);
-		} else if (this.level == Level.HARD || this.level == Level.INSANE) {
+		} else if (this.level == Level.HARD) {
 			alienList = new RegularAlienList(8);
 			populateAlienRow(1, 2);
 			populateAlienRow(2, 2);
