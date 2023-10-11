@@ -93,11 +93,11 @@ public class Game {
 
 	public void enableLaser() {
 		//TODO fill your code	
-		laser = true;
+		laser = false;
 	}
 	
 	public void disableLaser() {
-		laser = false;
+		laser = true;
 	}
 
 	public Random getRandom() {
@@ -155,12 +155,13 @@ public class Game {
 	public boolean shoot() {
 		if (laser) {
 			System.out.println(Messages.LASER_ERROR);
-			return true;
+			return false;
 		} else {
 			UCMLaser curr_laser = new UCMLaser(player, this);
 			Position laser_position = curr_laser.getPosition();
 	        other_board[laser_position.getRow()][laser_position.getCol()] = curr_laser;
 	        entities.add(curr_laser);
+	        laser = true;
 			return true;
 		}
 	}
