@@ -16,6 +16,7 @@ public class UCMLaser implements Entity{
 	private Move dir = Move.UP;
 	private Game game;
 	private Position position;
+	private int damage = 1;
 	
 	
 	public UCMLaser(UCMShip ship, Game game) {
@@ -35,7 +36,7 @@ public class UCMLaser implements Entity{
 	/**
 	 *  Method called when the laser disappears from the board
 	 */
-	public void die() {
+	private void die() {
 		game.remove(this);
 		game.enableLaser();
 	}
@@ -50,5 +51,18 @@ public class UCMLaser implements Entity{
 			return false;
 		}
 		return true;
+	}
+
+	public void reduceHealth(int damage) {
+		
+	}
+	
+	public boolean attack(Entity entity) {
+		if (!(entity instanceof Space)) {
+			entity.reduceHealth(damage);
+			die();
+			return true;
+		} 
+		return false;
 	}
 }

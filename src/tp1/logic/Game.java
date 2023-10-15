@@ -21,17 +21,19 @@ public class Game {
 	public static final int DIM_Y = 8;
 	private Entity[][] board = new Entity[DIM_Y][DIM_X];
 	private Set<Entity> entities = new HashSet<Entity>();
-	private UCMShip player = new UCMShip();
+	private UCMShip player = new UCMShip(this);
 	private UCMLaser currentLaser = null;
 	private int cycles = 0;
 	private int points = 0;
 	private int speed;
 	private boolean laser = false;
-	private Move direction = Move.LEFT;
+	private Move direction = Move.RIGHT;
+	private boolean edge = false;
 	private Level level;
 	private Random random;
 	private boolean updateBoard = true;
 	private boolean running = true;
+	private Space space = new Space();
 
 	//TODO fill your code
 
@@ -213,18 +215,43 @@ public class Game {
 		board[position.getRow()][position.getCol()] = entity;
 	}
 	
+	
 	private void resetBoard() {
 		board = new Entity[DIM_Y][DIM_X];
-		Space space = new Space();
 		for (int i = 0; i < board.length; i++) {
 		    Arrays.fill(board[i], space);
 		}
 	}
 	
+	private void orienter() {
+		if (shouldMove()) {
+			if (edge) {
+				RegularAlien.changeDirection(Move.DOWN);
+				changeEdge(!edge);
+				if (direction.equals(Move.LEFT)) {
+					direction = Move.RIGHT;
+				} else {
+					direction = Move.LEFT;
+				}
+			} else {
+				RegularAlien.changeDirection(direction);
+			}
+		}
+	}
+	
+	public boolean shouldMove() {
+		return cycles % speed == 0;
+	}
+	
+	public void changeEdge(boolean edge) {
+		this.edge = edge;
+	}
 	
 	public void next(){
 		
 		resetBoard();
+		
+		orienter();
 		
 		for (Entity entity : entities) {
 			entity.automaticMove();
@@ -234,16 +261,19 @@ public class Game {
 		
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
 		switch (playerPosition.getClass().getName())  {
+		
 			default :
 				fill(player);
 		}
 		
 		if (laser && currentLaser.automaticMove()) {
-			Entity laserPosition = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
-			switch (laserPosition.getClass().getName())  {
-				default :
-					fill(currentLaser);
+			Entity entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
+			if (!currentLaser.attack(entity)) {
+				fill(currentLaser);
+			} else if (!entities.contains(entity)) {
+				board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
 			}
+			
 		} 
 		
 		cycles += 1;

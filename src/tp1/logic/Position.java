@@ -34,7 +34,7 @@ public class Position {
 	
 	public static boolean onBorder(Position position) {
 		int col = position.getCol();
-		if (col == 0 || col == Game.DIM_X) {
+		if (col == 0 || col == Game.DIM_X - 1) {
 			return true;
 		}
 		return false;

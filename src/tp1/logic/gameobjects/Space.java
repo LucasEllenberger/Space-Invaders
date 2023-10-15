@@ -15,4 +15,8 @@ public class Space implements Entity{
 		return false;
 	}
 	
+	public void reduceHealth(int damage) {
+		
+	}
+	
 }

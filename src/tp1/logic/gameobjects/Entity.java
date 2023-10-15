@@ -7,4 +7,6 @@ public interface Entity {
     Position getPosition();
     
     boolean automaticMove();
+    
+    void reduceHealth(int damage);
 }

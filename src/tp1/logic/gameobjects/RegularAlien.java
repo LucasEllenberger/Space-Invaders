@@ -13,13 +13,15 @@ import tp1.view.Messages;
 public class RegularAlien implements Entity{
 
 	//TODO fill your code
-	private static Move dir = Move.LEFT;
+	private static Move dir;
+	private Game game;
 	private Position position;
 	private int health = 2;
 
 	//TODO fill your code
 	
 	public RegularAlien(Game game, Position position) {
+		this.game = game;
 		this.position = position;
 		game.add(this);
 	}
@@ -36,7 +38,23 @@ public class RegularAlien implements Entity{
 	 */
 	public boolean automaticMove() {
 		//TODO fill your code
-		Position.update(position, dir);
+		if (game.shouldMove()) {
+			Position.update(position, dir);
+			if (Position.onBorder(position) && !dir.equals(Move.DOWN)) {
+				game.changeEdge(true);
+			}
+		}
 		return true;
+	}
+	
+	public static void changeDirection(Move move) {
+		dir = move;
+	}
+	
+	public void reduceHealth(int damage)  {
+		this.health -= damage;
+		if (health <= 0) {
+			game.remove(this);
+		}
 	}
 }
