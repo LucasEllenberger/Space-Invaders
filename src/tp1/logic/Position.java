@@ -60,9 +60,12 @@ public class Position {
 			return true;
 		}
 	}
+	
 	public static void update(Position position, Move move) {
 		int newRow = position.getRow() + move.getY();
 		int newCol = position.getCol() + move.getX();
 		position.set(newRow, newCol);
  	}
+	
+
 }

@@ -23,8 +23,5 @@ public enum Move {
 		return y;
 	}
 
-
-	//TODO fill your code
-	
 	
 }

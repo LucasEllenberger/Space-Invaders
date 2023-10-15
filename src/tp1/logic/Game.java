@@ -1,33 +1,33 @@
 package tp1.logic;
 
 import java.util.Random;
-import java.util.Map;
 import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.lang.reflect.Constructor;
 
 import tp1.control.Controller;
 import tp1.logic.gameobjects.UCMShip;
 import tp1.logic.gameobjects.UCMLaser;
 import tp1.logic.gameobjects.Entity;
+import tp1.logic.gameobjects.RegularAlien;
+import tp1.logic.gameobjects.Space;
 import tp1.view.Messages;
 
-// TODO implementarlo
+
 public class Game {
 
 	public static final int DIM_X = 9;
 	public static final int DIM_Y = 8;
 	private Entity[][] board = new Entity[DIM_Y][DIM_X];
-	private Entity[][] other_board = new Entity[DIM_Y][DIM_X];
 	private Set<Entity> entities = new HashSet<Entity>();
 	private UCMShip player = new UCMShip();
-	private UCMLaser curr_laser = null;
-	private AlienManager aliens;
+	private UCMLaser currentLaser = null;
 	private int cycles = 0;
 	private int points = 0;
+	private int speed;
 	private boolean laser = false;
+	private Move direction = Move.LEFT;
 	private Level level;
 	private Random random;
 	private boolean updateBoard = true;
@@ -37,13 +37,37 @@ public class Game {
 
 	public Game(Level level, long seed) {
 		//TODO fill your code}
-        Position position = player.getPosition();
-        board[position.getRow()][position.getCol()] = player;
-        entities.add(player);
         this.level = level;
+        this.speed = level.getSpeed();
         this.random = new Random(seed);
-        aliens = new AlienManager(this, level);
-        
+        resetBoard();
+        initialize();
+		fill(player);
+	}
+	
+	private void initialize() {
+		switch (level.name()) {
+		case "INSANE":  fillMany(2, 4, RegularAlien.class);
+		case "HARD": fillMany(2, 4, RegularAlien.class);
+		case "EASY": fillMany(1, 4, RegularAlien.class);
+	    default: Controller.commandError();
+		}
+	}
+	
+	// not safe, be careful
+	private void fillMany(int row, int amount, Class clazz) {
+		int start = (DIM_X - amount) / 2;
+		try {
+			Constructor constructor = clazz.getDeclaredConstructor(Game.class, Position.class);
+			 for (int i = 0; i < amount; i++) {
+			 	Position position = new Position(start + i, row);
+	            board[row][start + i] = (Entity) constructor.newInstance(this, position);
+		     }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+      		
+		
 	}
 
 	public String stateToString() {
@@ -59,18 +83,12 @@ public class Game {
 	public int getRemainingAliens() {
 		//TODO fill your code
 		// ask Alien manager for remaining aliens
-		return aliens.getRemainingAliens();
+		return 0;
 	}
 
 	public String positionToString(int col, int row) {
 		//TODO fill your code
-		if (board[row][col] != null) {
-			return board[row][col].getSymbol(); 
-		}
-		if (other_board[row][col] != null) { 
-			return other_board[row][col].getSymbol();
-		}
-		return Messages.EMPTY;
+		return board[row][col].getSymbol();
 	}
 
 	public boolean playerWin() {
@@ -161,16 +179,18 @@ public class Game {
 			System.out.println(Messages.LASER_ERROR);
 			return false;
 		} else {
-			curr_laser = new UCMLaser(player, this);
-			Position laser_position = curr_laser.getPosition();
-	        other_board[laser_position.getRow()][laser_position.getCol()] = curr_laser;
-	        entities.add(curr_laser);
+			currentLaser = new UCMLaser(player, this);
 			return true;
 		}
 	}
 	
 	public boolean remove(Object entity) {
 		entities.remove(entity);
+		return true;
+	}
+	
+	public boolean add(Entity entity) {
+		entities.add(entity);
 		return true;
 	}
 	
@@ -185,33 +205,50 @@ public class Game {
 	    case "none" -> Move.NONE;
 	    default -> null;
 		};
-		update(player.getPosition(), null, true);
-		boolean result = Position.updateSafe(player.getPosition(), move);
-		update(player.getPosition(), player, true);
-		return result;
-//		if (move == null) {
-//			return false;
-//		} else {
-//			return true;
-//		}
+		return Position.updateSafe(player.getPosition(), move);
 	}
 	
-	private void update(Position position, Entity entity, boolean original) {
-	    if (original)
-	    	board[position.getRow()][position.getCol()] = entity;
-	    else
-	    	other_board[position.getRow()][position.getCol()] = entity;
+	private void fill(Entity entity) {
+		Position position = entity.getPosition();
+		board[position.getRow()][position.getCol()] = entity;
 	}
 	
-	public void next(){
-		cycles += 1;
-		if (laser) {
-			update(curr_laser.getPosition(), null, false);
-			boolean still_in = curr_laser.automaticMove();
-			if (still_in)
-				update(curr_laser.getPosition(), curr_laser, false);
-			// TODO check if the move made it collide with something
-			// need to see if it attacks anything
+	private void resetBoard() {
+		board = new Entity[DIM_Y][DIM_X];
+		Space space = new Space();
+		for (int i = 0; i < board.length; i++) {
+		    Arrays.fill(board[i], space);
 		}
 	}
+	
+	
+	public void next(){
+		
+		resetBoard();
+		
+		for (Entity entity : entities) {
+			entity.automaticMove();
+			fill(entity);
+		}
+	
+		
+		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
+		switch (playerPosition.getClass().getName())  {
+			default :
+				fill(player);
+		}
+		
+		if (laser && currentLaser.automaticMove()) {
+			Entity laserPosition = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
+			switch (laserPosition.getClass().getName())  {
+				default :
+					fill(currentLaser);
+			}
+		} 
+		
+		cycles += 1;
+		
+	
+	}
+
 }

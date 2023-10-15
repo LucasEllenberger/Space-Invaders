@@ -67,4 +67,9 @@ public enum Level {
 		String allLevels = sb.toString();
 		return allLevels.substring(0, allLevels.length() - separator.length());
 	}
+	
+	
+	public int getSpeed() {
+		return numCyclesToMoveOneCell;
+	}
 }

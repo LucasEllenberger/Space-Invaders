@@ -1,61 +1,42 @@
 package tp1.logic.gameobjects;
 
-import tp1.logic.AlienManager;
 import tp1.logic.Game;
 import tp1.logic.Move;
 import tp1.logic.Position;
+import tp1.view.Messages;
 
 /**
  * 
  * Class representing a regular alien
  *
  */
-public class RegularAlien {
+public class RegularAlien implements Entity{
 
 	//TODO fill your code
-	private int cyclesToMove;
-	private int speed;
-	private Move dir;
-	private Position position;	
-	private AlienManager alienManager;
+	private static Move dir = Move.LEFT;
+	private Position position;
+	private int health = 2;
 
 	//TODO fill your code
 	
-	public RegularAlien(AlienManager alienManager, Position position, int speed) {
-		this.alienManager = alienManager;
+	public RegularAlien(Game game, Position position) {
 		this.position = position;
-		this.speed = speed;
-		this.cyclesToMove = speed;
-		this.dir = Move.LEFT;
+		game.add(this);
 	}
-
+	
+	public String getSymbol() {
+		return String.format(Messages.GAME_OBJECT_STATUS, Messages.REGULAR_ALIEN_SYMBOL, health);
+	}
+	
+	public Position getPosition() {
+		return position;
+	}
 	/**
 	 *  Implements the automatic movement of the regular alien	
 	 */
-	public void automaticMove() {
+	public boolean automaticMove() {
 		//TODO fill your code
+		Position.update(position, dir);
+		return true;
 	}
-
-	private void descent() {
-		//TODO fill your code
-		
-	}
-
-	private void performMovement(Move dir) {
-		//TODO fill your code
-		
-	}
-
-	private boolean isInBorder() {
-		//TODO fill your code
-		// WE ASSUME THAT THE BORDER IS 8
-		return Position.onBorder(position);
-	}
-
-	public boolean receiveAttack(UCMLaser laser) {
-		//TODO fill your code
-		return false;
-	}
-	
-
 }
