@@ -12,6 +12,7 @@ import tp1.logic.gameobjects.UCMLaser;
 import tp1.logic.gameobjects.Entity;
 import tp1.logic.gameobjects.RegularAlien;
 import tp1.logic.gameobjects.Space;
+import tp1.logic.gameobjects.Ufo;
 import tp1.view.Messages;
 
 
@@ -23,6 +24,7 @@ public class Game {
 	private Set<Entity> entities = new HashSet<Entity>();
 	private UCMShip player = new UCMShip(this);
 	private UCMLaser currentLaser = null;
+	private Ufo ufo = new Ufo(this);
 	private int cycles = 0;
 	private int points = 0;
 	private int speed;
@@ -62,11 +64,14 @@ public class Game {
 		int start = (DIM_X - amount) / 2;
 		try {
 			Constructor constructor = clazz.getDeclaredConstructor(Game.class, Position.class);
-			 for (int i = 0; i < amount; i++) {
-			 	Position position = new Position(start + i, row);
-	            board[row][start + i] = (Entity) constructor.newInstance(this, position);
-	            numRemainingAliens++;
-		     }
+//			for (int i = 1; i <= row; i++) {
+				for (int j = 0; j < amount; j++) {
+					Position position = new Position(start + j, row);
+		            board[row][start + j] = (Entity) constructor.newInstance(this, position);
+		            numRemainingAliens++;
+		            System.out.println("Created the " + numRemainingAliens + " alien at position " + start + j + " : " + row);
+				}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -266,6 +271,12 @@ public class Game {
 			fill(entity);
 		}
 	
+		ufo.computerAction();
+		if (ufo.getPosition() != null) {
+			board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
+		} // else {
+//			ufo.automaticMove();
+//		}
 		
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
 		switch (playerPosition.getClass().getName())  {

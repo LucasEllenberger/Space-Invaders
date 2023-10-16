@@ -54,7 +54,7 @@ public class UCMLaser implements Entity{
 	}
 
 	public void reduceHealth(int damage) {
-		
+		die();
 	}
 	
 	public boolean attack(Entity entity) {
