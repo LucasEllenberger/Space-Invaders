@@ -27,7 +27,7 @@ public class Game {
 	private int points = 0;
 	private int speed;
 	private boolean laser = false;
-	private Move direction = Move.RIGHT;
+	private Move direction = Move.LEFT;
 	private boolean edge = false;
 	private Level level;
 	private Random random;
@@ -248,7 +248,7 @@ public class Game {
 	}
 	
 	public boolean shouldMove() {
-		return cycles % speed == 0;
+		return ((cycles % speed == 0) && (cycles != 0));
 	}
 	
 	public void changeEdge(boolean edge) {
