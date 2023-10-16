@@ -34,6 +34,7 @@ public class Game {
 	private boolean updateBoard = true;
 	private boolean running = true;
 	private Space space = new Space();
+	private int numRemainingAliens = 0;
 
 	//TODO fill your code
 
@@ -64,6 +65,7 @@ public class Game {
 			 for (int i = 0; i < amount; i++) {
 			 	Position position = new Position(start + i, row);
 	            board[row][start + i] = (Entity) constructor.newInstance(this, position);
+	            numRemainingAliens++;
 		     }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +87,7 @@ public class Game {
 	public int getRemainingAliens() {
 		//TODO fill your code
 		// ask Alien manager for remaining aliens
-		return 0;
+		return numRemainingAliens;
 	}
 
 	public String positionToString(int col, int row) {
@@ -100,7 +102,7 @@ public class Game {
 //		this.running = false;
 //			return true;
 //		}
-		return false;
+		return (numRemainingAliens == 0);
 	}
 
 	public boolean aliensWin() {
@@ -152,6 +154,9 @@ public class Game {
 	}	
 	
 	public boolean running() {
+		if (numRemainingAliens == 0) {
+			return false;
+		}
 		return this.running;
 	}
 	
@@ -187,6 +192,9 @@ public class Game {
 	}
 	
 	public boolean remove(Object entity) {
+		if (entity instanceof RegularAlien) {
+			numRemainingAliens--;
+		}
 		entities.remove(entity);
 		return true;
 	}
@@ -275,10 +283,6 @@ public class Game {
 			}
 			
 		} 
-		
 		cycles += 1;
-		
-	
 	}
-
 }
