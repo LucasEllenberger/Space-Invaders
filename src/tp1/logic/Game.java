@@ -137,6 +137,10 @@ public class Game {
 			if (entity instanceof RegularAlien) {
 				ret |= ((RegularAlien) entity).onLastRow();
 			}
+			// TODO: uncomment when destroyer is implemented
+//			if (entity instanceof DestroyerAlien) {
+//				ret |= ((DestroyerAlien) entity).onLastRow();
+//			}
 		}
 		return ret;
 	}
@@ -164,6 +168,7 @@ public class Game {
 	}
 	
 	public boolean reset() {
+		// TODO
 		return true;
 	}
 	
@@ -197,13 +202,17 @@ public class Game {
 	public boolean shockwave() {
 		if (shockwave) {
 			for (Entity entity : entities) {
-				if (entity instanceof RegularAlien) {
+				// TODO uncomment once destroyer alien is implemented
+				if (entity instanceof RegularAlien /*|| entity instanceof DestroyerAlien*/) {
+					// TODO
+					// issue if reg alien dies in the middle of looping through entities
 					entity.reduceHealth(1);
 				}
 			}
 			shockwave = false;
 			return true;
 		} else {
+			System.out.println(Messages.SHOCKWAVE_ERROR);
 			return false;
 		}
 	}
