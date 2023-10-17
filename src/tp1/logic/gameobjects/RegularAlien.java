@@ -17,6 +17,7 @@ public class RegularAlien implements Entity{
 	private Game game;
 	private Position position;
 	private int health = 2;
+	private int points = 5;
 
 	//TODO fill your code
 	
@@ -33,6 +34,11 @@ public class RegularAlien implements Entity{
 	public Position getPosition() {
 		return position;
 	}
+	
+	public int getPoints() {
+		return points;
+	}
+	
 	/**
 	 *  Implements the automatic movement of the regular alien	
 	 */
@@ -54,6 +60,7 @@ public class RegularAlien implements Entity{
 	public void reduceHealth(int damage)  {
 		this.health -= damage;
 		if (health <= 0) {
+			game.addPoints(points);
 			game.remove(this);
 		}
 	}

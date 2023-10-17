@@ -16,6 +16,10 @@ public class UCMShip implements Entity {
 		return Messages.UCMSHIP_SYMBOL;
 	}
 	
+	public int getHealth() {
+		return health;
+	}
+	
 	public Position getPosition() {
 		return position;
 	}

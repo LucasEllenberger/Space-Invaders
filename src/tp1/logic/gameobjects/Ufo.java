@@ -12,6 +12,7 @@ public class Ufo implements Entity{
 	private static Move dir = Move.LEFT;
 	private Position position;
 	private int health = 1;
+	private int points = 25;
 
 	private boolean enabled = false;
 	private Game game;
@@ -21,15 +22,19 @@ public class Ufo implements Entity{
 		this.game = game;
 	}
 
-	public void computerAction() {
+	public boolean computerAction() {
 		if(!enabled && canGenerateRandomUfo()) {
 			enable();
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
 	private void enable() {
 		//TODO fill your code
 		this.position = new Position(game.DIM_X - 1, 0);
+		health = 1;
 	}
 	
 	public void onDelete() {
@@ -47,14 +52,17 @@ public class Ufo implements Entity{
 
 	@Override
 	public String getSymbol() {
-		// TODO Auto-generated method stub
-		return Messages.UFO_SYMBOL;
+		return String.format(Messages.GAME_OBJECT_STATUS, Messages.UFO_SYMBOL, health);
 	}
 
 	@Override
 	public Position getPosition() {
 		// TODO Auto-generated method stub
 		return position;
+	}
+	
+	public int getPoints() {
+		return points;
 	}
 
 	@Override
@@ -80,6 +88,8 @@ public class Ufo implements Entity{
 		if (health <= 0) {
 			position = null;
 			enabled = false;
+			game.addPoints(points);
+			game.enableShockwave();
 		}
 	}
 	

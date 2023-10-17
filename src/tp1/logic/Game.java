@@ -29,6 +29,7 @@ public class Game {
 	private int points = 0;
 	private int speed;
 	private boolean laser = false;
+	private boolean shockwave = false;
 	private Move direction = Move.LEFT;
 	private boolean edge = false;
 	private Level level;
@@ -69,7 +70,6 @@ public class Game {
 					Position position = new Position(start + j, row);
 		            board[row][start + j] = (Entity) constructor.newInstance(this, position);
 		            numRemainingAliens++;
-		            System.out.println("Created the " + numRemainingAliens + " alien at position " + start + j + " : " + row);
 				}
 //			}
 		} catch (Exception e) {
@@ -87,6 +87,10 @@ public class Game {
 	public int getCycle() {
 		//TODO fill your code
 		return cycles;
+	}
+	
+	public int getPoints() {
+		return points;
 	}
 
 	public int getRemainingAliens() {
@@ -182,8 +186,34 @@ public class Game {
 		return false;
 	}
 	
+	public void addPoints(int newPoints) {
+		points += newPoints;
+	}
+	
+	public void enableShockwave() {
+		shockwave = true;
+	}
+	
+	public boolean getShockwave() {
+		return shockwave;
+	}
+	
 	public boolean shockwave() {
-		return true;
+		if (shockwave) {
+			for (Entity entity : entities) {
+				if (entity instanceof RegularAlien) {
+					entity.reduceHealth(1);
+				}
+			}
+			shockwave = false;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public int getUCMHealth() {
+		return player.getHealth();
 	}
 	
 	public boolean shoot() {
@@ -261,7 +291,7 @@ public class Game {
 	}
 	
 	public void next(){
-		
+		boolean updateUfo = false;
 		resetBoard();
 		
 		orienter();
@@ -270,13 +300,18 @@ public class Game {
 			entity.automaticMove();
 			fill(entity);
 		}
-	
-		ufo.computerAction();
+
 		if (ufo.getPosition() != null) {
-			board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
-		} // else {
-//			ufo.automaticMove();
-//		}
+			updateUfo = ufo.automaticMove();
+			if (updateUfo) {
+				board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
+			}
+		}  else {
+			updateUfo = ufo.computerAction();
+			if (updateUfo) {
+				board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
+			}
+		}
 		
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
 		switch (playerPosition.getClass().getName())  {
