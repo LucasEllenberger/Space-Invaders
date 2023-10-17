@@ -41,7 +41,7 @@ public class RegularAlien implements Entity{
 		if (game.shouldMove()) {
 			Position.update(position, dir);
 			if (Position.onBorder(position) && !dir.equals(Move.DOWN)) {
-				game.changeEdge(true);
+				game.changeState("edge", true);
 			}
 		}
 		return true;
