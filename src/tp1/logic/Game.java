@@ -3,7 +3,9 @@ package tp1.logic;
 import java.util.Random;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.Map;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.lang.reflect.Constructor;
 
 import tp1.control.Controller;
@@ -20,10 +22,10 @@ public class Game {
 
 	public static final int DIM_X = 9;
 	public static final int DIM_Y = 8;
-	private Entity[][] board = new Entity[DIM_Y][DIM_X];
+	private Entity[][] board;
 	private Set<Entity> entities = new HashSet<Entity>();
 	private UCMShip player = new UCMShip(this);
-	private UCMLaser currentLaser = null;
+	private UCMLaser currentLaser;
 	private Ufo ufo = new Ufo(this);
 	private int cycles = 0;
 	private int points = 0;
@@ -31,15 +33,18 @@ public class Game {
 	private boolean laser = false;
 	private boolean shockwave = false;
 	private Move direction = Move.LEFT;
-	private boolean edge = false;
 	private Level level;
 	private Random random;
-	private boolean updateBoard = true;
-	private boolean running = true;
 	private Space space = new Space();
 	private int numRemainingAliens = 0;
-
-	//TODO fill your code
+	private Map<String, Boolean> state = new HashMap<String, Boolean>() {{
+         put("laser", false);
+         put("edge", false);
+         put("running", true);
+         put("ufo", false);
+     }};
+	
+ 	//TODO fill your code
 
 	public Game(Level level, long seed) {
 		//TODO fill your code}
@@ -49,6 +54,14 @@ public class Game {
         resetBoard();
         initialize();
 		fill(player);
+	}
+	
+	public void changeState(String field, Boolean value) {
+		state.put(field, value);
+	}
+	
+	public boolean getState(String field) {
+		return state.get(field);
 	}
 	
 	private void initialize() {
@@ -65,19 +78,19 @@ public class Game {
 		int start = (DIM_X - amount) / 2;
 		try {
 			Constructor constructor = clazz.getDeclaredConstructor(Game.class, Position.class);
-//			for (int i = 1; i <= row; i++) {
-				for (int j = 0; j < amount; j++) {
-					Position position = new Position(start + j, row);
-		            board[row][start + j] = (Entity) constructor.newInstance(this, position);
-		            numRemainingAliens++;
-				}
-//			}
+			for (int j = 0; j < amount; j++) {
+				Position position = new Position(start + j, row);
+	            board[row][start + j] = (Entity) constructor.newInstance(this, position);
+	            numRemainingAliens++;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
       		
 		
 	}
+	
+	
 
 	public String stateToString() {
 		//TODO fill your code
@@ -126,15 +139,6 @@ public class Game {
 		return false;
 	}
 
-	public void enableLaser() {
-		//TODO fill your code	
-		laser = false;
-	}
-	
-	public void disableLaser() {
-		laser = true;
-	}
-
 	public Random getRandom() {
 		//TODO fill your code
 		return this.random;
@@ -166,23 +170,12 @@ public class Game {
 		if (numRemainingAliens == 0) {
 			return false;
 		}
-		return this.running;
+		return state.get("running");
 	}
 	
-	public boolean update() {
-		return updateBoard;
-	}
-	
-	public void enableUpdate() {
-		this.updateBoard = true;
-	}
-	
-	public void disableUpdate() {
-		this.updateBoard = false;
-	}
 	
 	public boolean exit() {
-		this.running = false;
+		changeState("running", false);
 		return false;
 	}
 	
@@ -217,7 +210,7 @@ public class Game {
 	}
 	
 	public boolean shoot() {
-		if (laser) {
+		if ((boolean) state.get("laser")) {
 			System.out.println(Messages.LASER_ERROR);
 			return false;
 		} else {
@@ -268,9 +261,10 @@ public class Game {
 	
 	private void orienter() {
 		if (shouldMove()) {
+			boolean edge = state.get("edge");
 			if (edge) {
 				RegularAlien.changeDirection(Move.DOWN);
-				changeEdge(!edge);
+				changeState("edge", !edge);
 				if (direction.equals(Move.LEFT)) {
 					direction = Move.RIGHT;
 				} else {
@@ -286,29 +280,26 @@ public class Game {
 		return ((cycles % speed == 0) && (cycles != 0));
 	}
 	
-	public void changeEdge(boolean edge) {
-		this.edge = edge;
-	}
-	
 	public void next(){
-		boolean updateUfo = false;
 		resetBoard();
 		
 		orienter();
+		boolean updateUfo = false;
 		
 		for (Entity entity : entities) {
 			entity.automaticMove();
 			fill(entity);
 		}
 
-		if (ufo.getPosition() != null) {
+		if (state.get("ufo")) {
 			updateUfo = ufo.automaticMove();
-			if (updateUfo) {
+			changeState("ufo", updateUfo);
+			if (state.get("ufo")) {
 				board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
 			}
 		}  else {
-			updateUfo = ufo.computerAction();
-			if (updateUfo) {
+			ufo.computerAction();
+			if (state.get("ufo")) {
 				board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
 			}
 		}
@@ -320,7 +311,7 @@ public class Game {
 				fill(player);
 		}
 		
-		if (laser && currentLaser.automaticMove()) {
+		if (state.get("laser") && currentLaser.automaticMove()) {
 			Entity entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
 			if (!currentLaser.attack(entity)) {
 				fill(currentLaser);

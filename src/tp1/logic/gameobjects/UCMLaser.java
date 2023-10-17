@@ -22,7 +22,7 @@ public class UCMLaser implements Entity{
 	public UCMLaser(UCMShip ship, Game game) {
 		this.game = game;
 		this.position = new Position(ship.getPosition().getCol(), ship.getPosition().getRow());
-		game.disableLaser();
+		game.changeState("laser", true);
 	}
 	
 	public String getSymbol() {
@@ -38,7 +38,7 @@ public class UCMLaser implements Entity{
 	 */
 	private void die() {
 		game.remove(this);
-		game.enableLaser();
+		game.changeState("laser", false);
 	}
 
 	/**

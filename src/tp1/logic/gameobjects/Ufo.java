@@ -22,42 +22,42 @@ public class Ufo implements Entity{
 		this.game = game;
 	}
 
-	public boolean computerAction() {
-		if(!enabled && canGenerateRandomUfo()) {
-			enable();
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public boolean computerAction() {
+//		if(!enabled && canGenerateRandomUfo()) {
+//			enable();
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 	
-	private void enable() {
-		//TODO fill your code
-		this.position = new Position(game.DIM_X - 1, 0);
-		health = 1;
-	}
+//	private void enable() {
+//		//TODO fill your code
+//		this.position = new Position(game.DIM_X - 1, 0);
+//		health = 1;
+//	}
 	
 	public void onDelete() {
 		//TODO fill your code
 	}
-
-	/**
-	 * Checks if the game should generate an ufo.
-	 * 
-	 * @return <code>true</code> if an ufo should be generated.
-	 */
+	public void computerAction() {
+		if(!game.getState("ufo") && canGenerateRandomUfo()) {
+			position = new Position(game.DIM_X - 1, 0);
+			game.add(this);
+			game.changeState("ufo", true);			
+		}
+	}
+	
 	private boolean canGenerateRandomUfo(){
 		return game.getRandom().nextDouble() < game.getLevel().getUfoFrequency();
 	}
 
-	@Override
+
 	public String getSymbol() {
 		return String.format(Messages.GAME_OBJECT_STATUS, Messages.UFO_SYMBOL, health);
 	}
 
-	@Override
 	public Position getPosition() {
-		// TODO Auto-generated method stub
 		return position;
 	}
 	
@@ -65,9 +65,10 @@ public class Ufo implements Entity{
 		return points;
 	}
 
-	@Override
+
 	public boolean automaticMove() {
-		// TODO Auto-generated method stub
+		// BIG PROBLEM : calling die() here isn't cool because we aren't allowed to 
+		// modify the entities lists while its being processed
 		Position.update(position, dir);
 		if(Position.outside(position)) {
 			die();
@@ -77,19 +78,18 @@ public class Ufo implements Entity{
 	}
 
 	private void die() {
-		position = null;
-		enabled = false;
+		game.remove(this);
+		game.changeState("ufo", false);
 	}
-	
-	@Override
+
 	public void reduceHealth(int damage) {
-		// TODO Auto-generated method stub
-		this.health -= damage;
+		health -= damage;
 		if (health <= 0) {
 			position = null;
 			enabled = false;
 			game.addPoints(points);
 			game.enableShockwave();
+			die();
 		}
 	}
 	
