@@ -260,7 +260,8 @@ public class Game {
 		ufo.computerAction();
 		
 		for (Entity entity : entities) {
-			if (entity.automaticMove()) fill(entity);
+			entity.automaticMove();
+			fill(entity);
 		}
 	
 		
