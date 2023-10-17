@@ -288,24 +288,29 @@ public class Game {
 		resetBoard();
 		
 		orienter();
-		boolean updateUfo = false;
+		boolean canFill = true;
 		
 		for (Entity entity : entities) {
-			entity.automaticMove();
-			fill(entity);
-		}
-
-		if (state.get("ufo")) {
-			updateUfo = ufo.automaticMove();
-			changeState("ufo", updateUfo);
-			if (state.get("ufo")) {
-				board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
+			if (entity instanceof Ufo) {
+				canFill = entity.automaticMove();
+				if (canFill) {
+					fill(entity);
+				}
+			} else {
+				entity.automaticMove();
+				fill(entity);
 			}
-		}  else {
+		}
+		
+		if (!state.get("ufo")) {
 			ufo.computerAction();
 			if (state.get("ufo")) {
-				board[ufo.getPosition().getRow()][ufo.getPosition().getCol()] = ufo;
+				fill(ufo);
 			}
+		}
+		
+		if (!canFill) {
+			ufo.onDelete();
 		}
 		
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
