@@ -33,6 +33,10 @@ public class UCMLaser implements Entity{
 		return position;
 	}
 	
+	public int getDamage() {
+		return damage;
+	}
+	
 	/**
 	 *  Method called when the laser disappears from the board
 	 */

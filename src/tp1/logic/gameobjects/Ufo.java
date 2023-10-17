@@ -71,15 +71,16 @@ public class Ufo implements Entity{
 		// modify the entities lists while its being processed
 		Position.update(position, dir);
 		if(Position.outside(position)) {
-			die();
+//			die();
 			return false;
 		}
 		return true;
 	}
 
 	private void die() {
-		game.remove(this);
 		game.changeState("ufo", false);
+		position = null;
+//		game.remove(this);
 	}
 
 	public void reduceHealth(int damage) {

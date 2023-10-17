@@ -68,7 +68,7 @@ public class Game {
 		switch (level.name()) {
 		case "INSANE":  fillMany(2, 4, RegularAlien.class);
 		case "HARD": fillMany(2, 4, RegularAlien.class);
-		case "EASY": fillMany(1, 4, RegularAlien.class);
+		case "EASY": fillMany(1, 4, RegularAlien.class); break;
 	    default: Controller.commandError();
 		}
 	}
@@ -154,7 +154,11 @@ public class Game {
 	}
 	
 	public boolean list() {
-		return true;
+		System.out.println(Messages.ucmShipDescription(Messages.UCMSHIP_DESCRIPTION, player.getEndurance(), player.getDamage()));
+		System.out.println(Messages.alienDescription(Messages.REGULAR_ALIEN_DESCRIPTION, 5, 0, 2));
+		System.out.println(Messages.alienDescription(Messages.DESTROYER_ALIEN_DESCRIPTION, 10, 1, 1));
+		System.out.println(Messages.alienDescription(Messages.UFO_DESCRIPTION, 25, 0, 1));
+		return false;
 	}
 	
 	public boolean reset() {
