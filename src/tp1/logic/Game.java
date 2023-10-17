@@ -129,14 +129,16 @@ public class Game {
 
 	public boolean aliensWin() {
 		//TODO fill your code
-		// need to return true when UCM health == 0
-//		if (UCMShip.health == 0) {
-//			this.running = false;
-//			return true;
-//		} else {
-//			return false;
-//		}
-		return false;
+		if (player.getHealth() == 0) {
+			return true;
+		}
+		boolean ret = false;
+		for (Entity entity : entities) {
+			if (entity instanceof RegularAlien) {
+				ret |= ((RegularAlien) entity).onLastRow();
+			}
+		}
+		return ret;
 	}
 
 	public Random getRandom() {
@@ -171,9 +173,6 @@ public class Game {
 	}	
 	
 	public boolean running() {
-		if (numRemainingAliens == 0) {
-			return false;
-		}
 		return state.get("running");
 	}
 	

@@ -57,6 +57,10 @@ public class RegularAlien implements Entity{
 		dir = move;
 	}
 	
+	public boolean onLastRow() {
+		return (position.getRow() == (game.DIM_Y - 1));
+	}
+	
 	public void reduceHealth(int damage)  {
 		this.health -= damage;
 		if (health <= 0) {
