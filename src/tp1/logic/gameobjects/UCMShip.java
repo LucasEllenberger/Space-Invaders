@@ -38,11 +38,13 @@ public class UCMShip implements Entity {
 		return false;
 	}
 	
-	public void reduceHealth(int damage) {
+	public boolean reduceHealth(int damage) {
 		health -= damage;
 		if (health <= 0) {
 			game.aliensWin();
+			return true;
 		}
+		return false;
 	}
 
 }

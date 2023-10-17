@@ -39,7 +39,7 @@ public class GamePrinter {
 		.append(Messages.NUMBER_OF_CYCLES).append(SPACE).append(game.getCycle()).append(NEW_LINE)
 		.append(Messages.LIFE).append(SPACE).append(game.getUCMHealth()).append(NEW_LINE)
 		.append(Messages.POINTS).append(SPACE).append(game.getPoints()).append(NEW_LINE)
-		.append(Messages.SHOCKWAVE).append(SPACE).append(game.getShockwave() ? "ON" : "OFF").append(NEW_LINE)
+		.append(Messages.SHOCKWAVE).append(SPACE).append(game.getState("shockwave") ? "ON" : "OFF").append(NEW_LINE)
 		.append(game.stateToString())
 		.append(Messages.REMAINING_ALIENS).append(SPACE).append(game.getRemainingAliens()).append(NEW_LINE);
 		/* @formatter:on */

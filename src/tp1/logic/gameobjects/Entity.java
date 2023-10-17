@@ -8,5 +8,5 @@ public interface Entity {
     
     boolean automaticMove();
     
-    void reduceHealth(int damage);
+    boolean reduceHealth(int damage);
 }

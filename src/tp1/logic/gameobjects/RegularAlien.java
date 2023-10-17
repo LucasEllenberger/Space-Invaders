@@ -61,11 +61,12 @@ public class RegularAlien implements Entity{
 		return (position.getRow() == (game.DIM_Y - 1));
 	}
 	
-	public void reduceHealth(int damage)  {
+	public boolean reduceHealth(int damage)  {
 		this.health -= damage;
 		if (health <= 0) {
 			game.addPoints(points);
-			game.remove(this);
+			return true;
 		}
+		return false;
 	}
 }

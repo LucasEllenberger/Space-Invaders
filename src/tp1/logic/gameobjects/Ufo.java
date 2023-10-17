@@ -41,6 +41,7 @@ public class Ufo implements Entity{
 		//TODO fill your code
 		die();
 	}
+	
 	public void computerAction() {
 		if(!game.getState("ufo") && canGenerateRandomUfo()) {
 			health = 1;
@@ -73,7 +74,7 @@ public class Ufo implements Entity{
 		// modify the entities lists while its being processed
 		Position.update(position, dir);
 		if(Position.outside(position)) {
-//			game.changeState("ufo", false);
+			game.changeState("ufo", false);
 			return false;
 		}
 		return true;
@@ -85,15 +86,17 @@ public class Ufo implements Entity{
 		game.remove(this);
 	}
 
-	public void reduceHealth(int damage) {
+	public boolean reduceHealth(int damage) {
 		health -= damage;
 		if (health <= 0) {
 			position = null;
 			enabled = false;
 			game.addPoints(points);
-			game.enableShockwave();
+			game.changeState("shockwave", true);
 			die();
+			return true;
 		}
+		return false;
 	}
 	
 }

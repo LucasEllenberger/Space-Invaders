@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.lang.reflect.Constructor;
 
@@ -30,8 +31,6 @@ public class Game {
 	private int cycles = 0;
 	private int points = 0;
 	private int speed;
-	private boolean laser = false;
-	private boolean shockwave = false;
 	private Move direction = Move.LEFT;
 	private Level level;
 	private Random random;
@@ -42,6 +41,7 @@ public class Game {
          put("edge", false);
          put("running", true);
          put("ufo", false);
+         put("shockwave", false);
      }};
 	
  	//TODO fill your code
@@ -130,6 +130,7 @@ public class Game {
 	public boolean aliensWin() {
 		//TODO fill your code
 		if (player.getHealth() == 0) {
+			//TODO display dead ship on board on final print screen
 			return true;
 		}
 		boolean ret = false;
@@ -191,25 +192,21 @@ public class Game {
 		points += newPoints;
 	}
 	
-	public void enableShockwave() {
-		shockwave = true;
-	}
-	
-	public boolean getShockwave() {
-		return shockwave;
-	}
-	
 	public boolean shockwave() {
-		if (shockwave) {
-			for (Entity entity : entities) {
-				// TODO uncomment once destroyer alien is implemented
+		if (state.get("shockwave")) {
+			Iterator<Entity> iterator = entities.iterator();
+			while (iterator.hasNext()) {
+				Entity entity = iterator.next();
 				if (entity instanceof RegularAlien /*|| entity instanceof DestroyerAlien*/) {
 					// TODO
 					// issue if reg alien dies in the middle of looping through entities
-					entity.reduceHealth(1);
+					if (entity.reduceHealth(1)) {
+						iterator.remove();
+						numRemainingAliens -= 1;
+					}
 				}
 			}
-			shockwave = false;
+			state.put("shockwave", false);
 			return true;
 		} else {
 			System.out.println(Messages.SHOCKWAVE_ERROR);
@@ -296,17 +293,14 @@ public class Game {
 		resetBoard();
 		
 		orienter();
-		boolean canFill = true;
 		
-		for (Entity entity : entities) {
-			if (entity instanceof Ufo) {
-				canFill = entity.automaticMove();
-				if (canFill) {
-					fill(entity);
-				}
-			} else {
-				entity.automaticMove();
+		Iterator<Entity> iterator = entities.iterator();
+		while (iterator.hasNext()) {
+			Entity entity = iterator.next();
+			if (entity.automaticMove()) {
 				fill(entity);
+			} else {
+				iterator.remove();
 			}
 		}
 		
@@ -315,10 +309,6 @@ public class Game {
 			if (state.get("ufo")) {
 				fill(ufo);
 			}
-		}
-		
-		if (!canFill) {
-			ufo.onDelete();
 		}
 		
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
