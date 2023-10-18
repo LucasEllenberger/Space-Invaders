@@ -14,6 +14,7 @@ import tp1.logic.gameobjects.UCMShip;
 import tp1.logic.gameobjects.UCMLaser;
 import tp1.logic.gameobjects.Entity;
 import tp1.logic.gameobjects.RegularAlien;
+import tp1.logic.gameobjects.DestroyerAlien;
 import tp1.logic.gameobjects.Space;
 import tp1.logic.gameobjects.Ufo;
 import tp1.view.Messages;
@@ -66,9 +67,20 @@ public class Game {
 	
 	private void initialize() {
 		switch (level.name()) {
-		case "INSANE":  fillMany(2, 4, RegularAlien.class);
-		case "HARD": fillMany(2, 4, RegularAlien.class);
-		case "EASY": fillMany(1, 4, RegularAlien.class); break;
+		case "INSANE":  
+			fillMany(1, 4, RegularAlien.class);
+			fillMany(2, 4, RegularAlien.class);
+			fillMany(3, 4, DestroyerAlien.class);
+			break;
+		case "HARD": 
+			fillMany(1, 4, RegularAlien.class);
+			fillMany(2, 4, RegularAlien.class);
+			fillMany(3, 2, DestroyerAlien.class);
+			break;
+		case "EASY": 
+			fillMany(1, 4, RegularAlien.class); 
+			fillMany(2, 2, DestroyerAlien.class);
+			break;
 	    default: Controller.commandError();
 		}
 	}
@@ -197,9 +209,7 @@ public class Game {
 			Iterator<Entity> iterator = entities.iterator();
 			while (iterator.hasNext()) {
 				Entity entity = iterator.next();
-				if (entity instanceof RegularAlien /*|| entity instanceof DestroyerAlien*/) {
-					// TODO
-					// issue if reg alien dies in the middle of looping through entities
+				if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
 					if (entity.reduceHealth(1)) {
 						iterator.remove();
 						numRemainingAliens -= 1;
@@ -229,7 +239,7 @@ public class Game {
 	}
 	
 	public boolean remove(Object entity) {
-		if (entity instanceof RegularAlien) {
+		if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
 			numRemainingAliens--;
 		}
 		entities.remove(entity);
@@ -273,6 +283,7 @@ public class Game {
 			boolean edge = state.get("edge");
 			if (edge) {
 				RegularAlien.changeDirection(Move.DOWN);
+				DestroyerAlien.changeDirection(Move.DOWN);
 				changeState("edge", !edge);
 				if (direction.equals(Move.LEFT)) {
 					direction = Move.RIGHT;
@@ -281,6 +292,7 @@ public class Game {
 				}
 			} else {
 				RegularAlien.changeDirection(direction);
+				DestroyerAlien.changeDirection(direction);
 			}
 		}
 	}
