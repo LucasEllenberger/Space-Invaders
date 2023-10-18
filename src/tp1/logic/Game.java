@@ -14,6 +14,7 @@ import tp1.logic.gameobjects.UCMShip;
 import tp1.logic.gameobjects.UCMLaser;
 import tp1.logic.gameobjects.Entity;
 import tp1.logic.gameobjects.RegularAlien;
+import tp1.logic.gameobjects.Bomb;
 import tp1.logic.gameobjects.DestroyerAlien;
 import tp1.logic.gameobjects.Space;
 import tp1.logic.gameobjects.Ufo;
@@ -26,6 +27,7 @@ public class Game {
 	public static final int DIM_Y = 8;
 	private Entity[][] board;
 	private Set<Entity> entities = new HashSet<Entity>();
+	private Set<Entity> temp = new HashSet<Entity>();
 	private UCMShip player = new UCMShip(this);
 	private UCMLaser currentLaser;
 	private Ufo ufo = new Ufo(this);
@@ -150,10 +152,9 @@ public class Game {
 			if (entity instanceof RegularAlien) {
 				ret |= ((RegularAlien) entity).onLastRow();
 			}
-			// TODO: uncomment when destroyer is implemented
-//			if (entity instanceof DestroyerAlien) {
-//				ret |= ((DestroyerAlien) entity).onLastRow();
-//			}
+			if (entity instanceof DestroyerAlien) {
+				ret |= ((DestroyerAlien) entity).onLastRow();
+			}
 		}
 		return ret;
 	}
@@ -238,7 +239,7 @@ public class Game {
 		}
 	}
 	
-	public boolean remove(Object entity) {
+	public boolean remove(Entity entity) {
 		if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
 			numRemainingAliens--;
 		}
@@ -248,6 +249,11 @@ public class Game {
 	
 	public boolean add(Entity entity) {
 		entities.add(entity);
+		return true;
+	}
+	
+	public boolean addTemp(Entity entity) {
+		temp.add(entity);
 		return true;
 	}
 	
@@ -269,7 +275,6 @@ public class Game {
 		Position position = entity.getPosition();
 		board[position.getRow()][position.getCol()] = entity;
 	}
-	
 	
 	private void resetBoard() {
 		board = new Entity[DIM_Y][DIM_X];
@@ -298,7 +303,8 @@ public class Game {
 	}
 	
 	public boolean shouldMove() {
-		return ((cycles % speed == 0) && (cycles != 0));
+		// TODO Insane moving too fast
+		return ((cycles % (speed + 1) == 0) && (cycles != 0));
 	}
 	
 	public void next(){
@@ -314,6 +320,15 @@ public class Game {
 			} else {
 				iterator.remove();
 			}
+		}
+		
+		for (Iterator<Entity> iter = temp.iterator(); iter.hasNext();) {
+		    Entity entity = iter.next();
+		    if (entity.automaticMove()) {
+		    	fill(entity);
+		    }
+		    add(entity);
+		    iter.remove();
 		}
 		
 		if (!state.get("ufo")) {

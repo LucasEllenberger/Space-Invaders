@@ -65,7 +65,9 @@ public class UCMLaser implements Entity{
 	public boolean attack(Entity entity) {
 		if (!(entity instanceof Space)) {
 			if (entity.reduceHealth(damage)) {
-				game.remove(entity);
+				if (!(entity instanceof Bomb)) {
+					game.remove(entity);
+				}
 			}
 			die();
 			return true;
