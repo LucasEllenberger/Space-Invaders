@@ -24,6 +24,7 @@ public class RegularAlien implements Entity{
 	public RegularAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		dir = game.getDirection();
 		game.add(this);
 	}
 	

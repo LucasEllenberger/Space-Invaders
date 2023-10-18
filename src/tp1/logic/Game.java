@@ -103,8 +103,6 @@ public class Game {
       		
 		
 	}
-	
-	
 
 	public String stateToString() {
 		//TODO fill your code
@@ -124,6 +122,10 @@ public class Game {
 		//TODO fill your code
 		// ask Alien manager for remaining aliens
 		return numRemainingAliens;
+	}
+	
+	public Move getDirection() {
+		return direction;
 	}
 
 	public String positionToString(int col, int row) {
@@ -160,12 +162,10 @@ public class Game {
 	}
 
 	public Random getRandom() {
-		//TODO fill your code
 		return this.random;
 	}
 
 	public Level getLevel() {
-		//TODO fill your code
 		return this.level;
 	}
 	
@@ -303,7 +303,6 @@ public class Game {
 	}
 	
 	public boolean shouldMove() {
-		// TODO Insane moving too fast
 		return ((cycles % (speed + 1) == 0) && (cycles != 0));
 	}
 	
@@ -311,6 +310,7 @@ public class Game {
 		resetBoard();
 		
 		orienter();
+		cycles += 1;
 		
 		Iterator<Entity> iterator = entities.iterator();
 		while (iterator.hasNext()) {
@@ -353,7 +353,6 @@ public class Game {
 				board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
 			}
 			
-		} 
-		cycles += 1;
+		}
 	}
 }

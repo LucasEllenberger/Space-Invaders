@@ -27,6 +27,7 @@ public class DestroyerAlien implements Entity{
 	public DestroyerAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		dir = game.getDirection();
 		game.add(this);
 	}
 	
