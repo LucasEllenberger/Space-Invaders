@@ -34,9 +34,7 @@ public class Controller {
 		System.out.print(Messages.PROMPT);
 		String line = scanner.nextLine();
 		String[] words = line.toLowerCase().trim().split("\\s+");
-
 		System.out.println(debug(line));
-
 		return words;
 	}
 
@@ -54,9 +52,7 @@ public class Controller {
 			if (result) {
 				game.next();
 				printGame();
-			} // else { 			// reset the boolean to update the board next cycle
-//				game.enableUpdate();
-//			}
+			}
 		}
 		System.out.print(printer.endMessage());
 	}
@@ -81,13 +77,18 @@ public class Controller {
 	private boolean new_handler(String[] command) {
 		if (command.length == 0) {
 			return errorHandler(Messages.INVALID_COMMAND);
-		} else {
+		} else if (command[0].toLowerCase().equals("r") || command[0].toLowerCase().equals("reset")) {
+			game.reset();
+			printGame();
+			return false;
+		}
+			else {
 			return switch (command[0].toLowerCase()) {
 			case "", "n", "none" -> game.none();
 		    case "w", "shockwave" -> game.shockwave();
 		    case "s", "shoot" -> game.shoot();
 		    case "l", "list" -> game.list();
-		    case "r", "reset" -> game.reset();
+//		    case "r", "reset" -> game.reset(); // printGame(); return false;
 		    case "h", "help" -> game.help();
 		    case "e", "exit" -> game.exit();
 		    case "m", "move" -> moveHandler(command);
@@ -118,39 +119,7 @@ public class Controller {
 		return false;
 	}
 
-//	private void handler(String[] command) {
-//		if (command.length >= 3) {
-//			commandError();
-//		} else if (command.length == 0) {
-//			game.none();
-//		} else if (command.length == 1) {
-//			switch (command[0].toLowerCase()) {
-//		    case "n", "none" -> game.none();
-//		    case "w", "shockwave" -> game.shockwave();
-//		    case "s", "shoot" -> game.shoot();
-//		    case "l", "list" -> game.list();
-//		    case "r", "reset" -> game.reset();
-//		    case "h", "help" -> game.help();
-//		    case "e", "exit" -> game.exit();
-//		    default -> System.out.println(Messages.INVALID_COMMAND);
-//			}
-//		} else {
-//			String cleaned = command[0].toLowerCase();
-//			if (cleaned.equals("move") || cleaned.equals("m")) {
-//				switch (command[1].toLowerCase()) {
-//				case "lleft", "left", "right", "rright", "up", "down", "none" -> game.move(command[1].toLowerCase());
-//				default -> commandError();
-//				}
-//			} else {
-//				game.disableUpdate();
-//				commandError();
-//			}
-//		}
-//	}
-	
 	public static void commandError() {
 		System.out.println("command is misspelled, does not exist, or cannot be executed");
 	}
-
-	
 }

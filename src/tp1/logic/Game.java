@@ -122,7 +122,6 @@ public class Game {
 	}
 
 	public String positionToString(int col, int row) {
-		//TODO fill your code
 		return board[row][col].getSymbol();
 	}
 
@@ -131,9 +130,7 @@ public class Game {
 	}
 
 	public boolean aliensWin() {
-		//TODO fill your code
 		if (player.getHealth() == 0) {
-			//TODO display dead ship on board on final print screen
 			return true;
 		}
 		boolean ret = false;
@@ -169,8 +166,21 @@ public class Game {
 	}
 	
 	public boolean reset() {
-		// TODO
-		return true;
+		temp.clear();
+		entities.clear();
+		state.put("laser", false);
+		state.put("edge", false);
+		state.put("running", true);
+		state.put("ufo", false);
+		state.put("shockwave", false);
+		numRemainingAliens = 0;
+		cycles = 0;
+		points = 0;
+		resetBoard();
+        initialize();
+        player.reset();
+		fill(player);
+		return false;
 	}
 	
 	public boolean help() {
