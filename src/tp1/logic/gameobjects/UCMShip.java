@@ -14,7 +14,11 @@ public class UCMShip implements Entity {
 	public UCMShip(Game game) {
 		this.game = game;
 	}
+	
 	public String getSymbol() {
+		if (health == 0) {
+			return Messages.UCMSHIP_DEAD_SYMBOL;
+		}
 		return Messages.UCMSHIP_SYMBOL;
 	}
 	
@@ -46,5 +50,4 @@ public class UCMShip implements Entity {
 		}
 		return false;
 	}
-
 }

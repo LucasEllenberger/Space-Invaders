@@ -12,14 +12,11 @@ import tp1.view.Messages;
  */
 public class RegularAlien implements Entity{
 
-	//TODO fill your code
 	private static Move dir;
 	private Game game;
 	private Position position;
 	private int health = 2;
 	private int points = 5;
-
-	//TODO fill your code
 	
 	public RegularAlien(Game game, Position position) {
 		this.game = game;
@@ -44,7 +41,6 @@ public class RegularAlien implements Entity{
 	 *  Implements the automatic movement of the regular alien	
 	 */
 	public boolean automaticMove() {
-		//TODO fill your code
 		if (game.shouldMove()) {
 			Position.update(position, dir);
 			if (Position.onBorder(position) && !dir.equals(Move.DOWN)) {

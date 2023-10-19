@@ -41,6 +41,10 @@ public enum Level {
 	public double getShootFrequency() {
 		return shootFrequency;
 	}
+	
+	public int getNumDestroyerAliens() {
+		return numDestroyerAliens;
+	}
 
 	/**
 	 * Parse a string and return any matching level

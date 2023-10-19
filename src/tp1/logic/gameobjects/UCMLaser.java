@@ -11,8 +11,7 @@ import tp1.view.Messages;
  *
  */
 public class UCMLaser implements Entity{
-	
-	//TODO fill your code
+
 	private Move dir = Move.UP;
 	private Game game;
 	private Position position;

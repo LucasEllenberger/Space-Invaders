@@ -12,7 +12,6 @@ import tp1.view.Messages;
  */
 public class DestroyerAlien implements Entity{
 
-	//TODO fill your code
 	private static Move dir;
 	private Game game;
 	private Position position;
@@ -20,13 +19,13 @@ public class DestroyerAlien implements Entity{
 	private int health = 1;
 	private int points = 10;
 	private int damage = 1;
+	private int id;
 	private boolean canBomb = true;
-
-	//TODO fill your code
 	
 	public DestroyerAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		id = position.getCol() % game.getLevel().getNumDestroyerAliens();
 		dir = game.getDirection();
 		game.add(this);
 	}
@@ -47,11 +46,14 @@ public class DestroyerAlien implements Entity{
 		return damage;
 	}
 	
+	public int getID() {
+		return id;
+	}
+	
 	/**
 	 *  Implements the automatic movement of the regular alien	
 	 */
 	public boolean automaticMove() {
-		//TODO fill your code
 		if (game.shouldMove()) {
 			Position.update(position, dir);
 			if (Position.onBorder(position) && !dir.equals(Move.DOWN)) {

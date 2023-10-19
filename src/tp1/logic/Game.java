@@ -20,7 +20,6 @@ import tp1.logic.gameobjects.Space;
 import tp1.logic.gameobjects.Ufo;
 import tp1.view.Messages;
 
-
 public class Game {
 
 	public static final int DIM_X = 9;
@@ -46,11 +45,8 @@ public class Game {
          put("ufo", false);
          put("shockwave", false);
      }};
-	
- 	//TODO fill your code
 
 	public Game(Level level, long seed) {
-		//TODO fill your code}
         this.level = level;
         this.speed = level.getSpeed();
         this.random = new Random(seed);
@@ -110,7 +106,6 @@ public class Game {
 	}
 
 	public int getCycle() {
-		//TODO fill your code
 		return cycles;
 	}
 	
@@ -119,8 +114,6 @@ public class Game {
 	}
 
 	public int getRemainingAliens() {
-		//TODO fill your code
-		// ask Alien manager for remaining aliens
 		return numRemainingAliens;
 	}
 	
@@ -134,12 +127,6 @@ public class Game {
 	}
 
 	public boolean playerWin() {
-		//TODO fill your code
-		// need to know if all the aliens are dead
-//		if (game.getRemainingAliens() == 0) {
-//		this.running = false;
-//			return true;
-//		}
 		return (numRemainingAliens == 0);
 	}
 
@@ -306,6 +293,22 @@ public class Game {
 		return ((cycles % (speed + 1) == 0) && (cycles != 0));
 	}
 	
+	public boolean bombAttackHandler(Bomb bomb) {
+		Position bombPos = bomb.getPosition();
+		if (state.get("laser")) {
+			Position laserPos = currentLaser.getPosition();
+			if ((bombPos.getCol() == laserPos.getCol()) && (bombPos.getRow() == laserPos.getRow())) {
+				bomb.attack(currentLaser);
+				return true;
+			}
+		}
+		if ((bombPos.getCol() == player.getPosition().getCol()) && (bombPos.getRow() == player.getPosition().getRow())) {
+			bomb.attack(player);
+			return true;
+		}
+		return false;
+	}
+	
 	public void next(){
 		resetBoard();
 		
@@ -316,7 +319,11 @@ public class Game {
 		while (iterator.hasNext()) {
 			Entity entity = iterator.next();
 			if (entity.automaticMove()) {
-				fill(entity);
+				if (entity instanceof Bomb && bombAttackHandler((Bomb)entity)) {
+					iterator.remove();
+				} else {
+					fill(entity);
+				}
 			} else {
 				iterator.remove();
 			}
@@ -325,15 +332,19 @@ public class Game {
 		for (Iterator<Entity> iter = temp.iterator(); iter.hasNext();) {
 		    Entity entity = iter.next();
 		    if (entity.automaticMove()) {
-		    	fill(entity);
+		    	if (entity instanceof Bomb && bombAttackHandler((Bomb)entity)) {
+		    		iter.remove();
+					continue;
+		    	} else {
+		    		fill(entity);
+		    	}
+		    	add(entity);
 		    }
-		    add(entity);
 		    iter.remove();
 		}
 		
 		if (!state.get("ufo")) {
-			ufo.computerAction();
-			if (state.get("ufo")) {
+			if (ufo.computerAction()) {
 				fill(ufo);
 			}
 		}
@@ -352,7 +363,6 @@ public class Game {
 			} else if (!entities.contains(entity)) {
 				board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
 			}
-			
 		}
 	}
 }
