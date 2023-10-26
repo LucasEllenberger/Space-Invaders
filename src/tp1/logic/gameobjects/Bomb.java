@@ -11,12 +11,11 @@ public class Bomb implements Entity {
 	private Game game;
 	private Position position;
 	private DestroyerAlien ship;
-	private int damage = 1;
 	
 	
 	public Bomb(DestroyerAlien ship, Game game) {
 		this.game = game;
-		this.position = new Position(ship.getPosition().getCol(), ship.getPosition().getRow());
+		this.position = new Position(ship.getPosition());
 		this.ship = ship;
 	}
 	
@@ -26,10 +25,6 @@ public class Bomb implements Entity {
 
 	public Position getPosition() {
 		return position;
-	}
-	
-	public int getDamage() {
-		return damage;
 	}
 	
 	
@@ -57,16 +52,4 @@ public class Bomb implements Entity {
 		return true;
 	}
 	
-	public boolean attack(Entity entity) {
-		if (!(entity instanceof Space)) {
-			if (entity.reduceHealth(damage)) {
-				if (!(entity instanceof UCMLaser)) {
-					game.remove(entity);
-				}
-			}
-			die();
-			return true;
-		} 
-		return false;
-	}
 }

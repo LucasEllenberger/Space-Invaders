@@ -20,7 +20,7 @@ public class UCMLaser implements Entity{
 	
 	public UCMLaser(UCMShip ship, Game game) {
 		this.game = game;
-		this.position = new Position(ship.getPosition().getCol(), ship.getPosition().getRow());
+		this.position = new Position(ship.getPosition());
 		game.changeState("laser", true);
 	}
 	
@@ -64,9 +64,7 @@ public class UCMLaser implements Entity{
 	public boolean attack(Entity entity) {
 		if (!(entity instanceof Space)) {
 			if (entity.reduceHealth(damage)) {
-				if (!(entity instanceof Bomb)) {
-					game.remove(entity);
-				}
+				game.remove(entity);
 			}
 			die();
 			return true;

@@ -18,14 +18,11 @@ public class DestroyerAlien implements Entity{
 	private Bomb currBomb;
 	private int health = 1;
 	private int points = 10;
-	private int damage = 1;
-	private int id;
 	private boolean canBomb = true;
 	
 	public DestroyerAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
-		id = position.getCol() % game.getLevel().getNumDestroyerAliens();
 		dir = game.getDirection();
 		game.add(this);
 	}
@@ -39,9 +36,6 @@ public class DestroyerAlien implements Entity{
 	}
 	
 	
-	public int getID() {
-		return id;
-	}
 	
 	/**
 	 *  Implements the automatic movement of the regular alien	

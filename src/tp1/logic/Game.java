@@ -299,77 +299,80 @@ public class Game {
 		return ((cycles % (speed + 1) == 0) && (cycles != 0));
 	}
 	
-	public boolean bombAttackHandler(Bomb bomb) {
-		Position bombPos = bomb.getPosition();
-		if (state.get("laser")) {
-			Position laserPos = currentLaser.getPosition();
-			if ((bombPos.getCol() == laserPos.getCol()) && (bombPos.getRow() == laserPos.getRow())) {
-				bomb.attack(currentLaser);
-				return true;
+	private void automaticMoves() {
+
+		Iterator<Entity> iterator = entities.iterator();
+		while (iterator.hasNext()) {
+			Entity entity = iterator.next();
+			if (entity.automaticMove()) {
+				fill(entity);
+			} else {
+				iterator.remove();
 			}
 		}
-		if ((bombPos.getCol() == player.getPosition().getCol()) && (bombPos.getRow() == player.getPosition().getRow())) {
-			bomb.attack(player);
-			return true;
+		
+		
+		for (Entity entity : temp) {
+			if (entity.automaticMove()) {
+				entities.add(entity);
+				fill(entity);
+			}
 		}
-		return false;
+		
+		temp.clear();
+		
+		if (!state.get("ufo") && ufo.computerAction()) {
+			fill(ufo);
+		}
+	}
+	
+	private void resolvePlayer() {
+		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
+		if (playerPosition instanceof Bomb) {
+			player.reduceHealth(Attributes.DestroyerAlien.damage);
+		}
+		fill(player);
+		
+
+	}
+	
+	private void resolveLaser() {
+		if (state.get("laser")) {
+			Entity entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
+			if (currentLaser.attack(entity)) {
+				if (entity instanceof Bomb) {
+					remove(entity);
+				}
+				if (!entities.contains(entity)) {
+					board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
+				}
+			} else if (currentLaser.automaticMove()) {
+				entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
+				if (currentLaser.attack(entity)) {
+					if (entity instanceof Bomb) {
+						remove(entity);
+					}
+					if (!entities.contains(entity)) {
+						board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
+					}
+				} else {
+					fill(currentLaser);
+				}
+			}
+		}
 	}
 	
 	public void next(){
 		resetBoard();
 		
 		orienter();
+				
+		automaticMoves();
+		
+		resolveLaser();
+		
+		resolvePlayer();
 		
 		cycles += 1;
-		
-		Iterator<Entity> iterator = entities.iterator();
-		while (iterator.hasNext()) {
-			Entity entity = iterator.next();
-			if (entity.automaticMove()) {
-				if (entity instanceof Bomb && bombAttackHandler((Bomb)entity)) {
-					iterator.remove();
-				} else {
-					fill(entity);
-				}
-			} else {
-				iterator.remove();
-			}
-		}
-		
-		for (Iterator<Entity> iter = temp.iterator(); iter.hasNext();) {
-		    Entity entity = iter.next();
-		    if (entity.automaticMove()) {
-		    	if (entity instanceof Bomb && bombAttackHandler((Bomb)entity)) {
-		    		iter.remove();
-					continue;
-		    	} else {
-		    		fill(entity);
-		    	}
-		    	add(entity);
-		    }
-		    iter.remove();
-		}
-		
-		if (!state.get("ufo")) {
-			if (ufo.computerAction()) {
-				fill(ufo);
-			}
-		}
-		
-		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
-		switch (playerPosition.getClass().getName())  {
-		
-			default :
-				fill(player);
-		}
-		
-		if (state.get("laser") && currentLaser.automaticMove()) {
-			Entity entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
-			if (!currentLaser.attack(entity)) {
-				fill(currentLaser);
-			} else if (!entities.contains(entity)) {
-				board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
-			}
-		}
 	}
 }

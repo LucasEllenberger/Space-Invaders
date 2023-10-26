@@ -33,10 +33,6 @@ public class RegularAlien implements Entity{
 		return position;
 	}
 	
-	public int getPoints() {
-		return points;
-	}
-	
 	/**
 	 *  Implements the automatic movement of the regular alien	
 	 */
