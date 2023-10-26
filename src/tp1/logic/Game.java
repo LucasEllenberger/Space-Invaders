@@ -14,6 +14,7 @@ import tp1.logic.gameobjects.UCMShip;
 import tp1.logic.gameobjects.UCMLaser;
 import tp1.logic.gameobjects.Entity;
 import tp1.logic.gameobjects.RegularAlien;
+import tp1.logic.gameobjects.Attributes;
 import tp1.logic.gameobjects.Bomb;
 import tp1.logic.gameobjects.DestroyerAlien;
 import tp1.logic.gameobjects.Space;
@@ -101,17 +102,19 @@ public class Game {
 	}
 
 	public String stateToString() {
-		//TODO fill your code
-		return "";
+		StringBuilder buffer = new StringBuilder();
+		String NEW_LINE = System.lineSeparator();
+		String SPACE = " ";
+		buffer.append(Messages.LIFE).append(SPACE).append(player.getHealth()).append(NEW_LINE)
+		.append(Messages.POINTS).append(SPACE).append(points).append(NEW_LINE)
+		.append(Messages.SHOCKWAVE).append(SPACE).append(getState("shockwave") ? "ON" : "OFF").append(NEW_LINE);
+		return buffer.toString();
 	}
 
 	public int getCycle() {
 		return cycles;
 	}
 	
-	public int getPoints() {
-		return points;
-	}
 
 	public int getRemainingAliens() {
 		return numRemainingAliens;
@@ -133,16 +136,13 @@ public class Game {
 		if (player.getHealth() == 0) {
 			return true;
 		}
-		boolean ret = false;
 		for (Entity entity : entities) {
-			if (entity instanceof RegularAlien) {
-				ret |= ((RegularAlien) entity).onLastRow();
-			}
-			if (entity instanceof DestroyerAlien) {
-				ret |= ((DestroyerAlien) entity).onLastRow();
+			if ((entity instanceof RegularAlien || entity instanceof DestroyerAlien) 
+					&& Position.onLastRow(entity.getPosition())) {
+				return true;
 			}
 		}
-		return ret;
+		return false;
 	}
 
 	public Random getRandom() {
@@ -158,10 +158,10 @@ public class Game {
 	}
 	
 	public boolean list() {
-		System.out.println(Messages.ucmShipDescription(Messages.UCMSHIP_DESCRIPTION, player.getEndurance(), player.getDamage()));
-		System.out.println(Messages.alienDescription(Messages.REGULAR_ALIEN_DESCRIPTION, 5, 0, 2));
-		System.out.println(Messages.alienDescription(Messages.DESTROYER_ALIEN_DESCRIPTION, 10, 1, 1));
-		System.out.println(Messages.alienDescription(Messages.UFO_DESCRIPTION, 25, 0, 1));
+		System.out.println(Messages.ucmShipDescription(Messages.UCMSHIP_DESCRIPTION, Attributes.Player.endurance,  Attributes.Player.damage));
+		System.out.println(Messages.alienDescription(Messages.REGULAR_ALIEN_DESCRIPTION, Attributes.RegularAlien.points, Attributes.RegularAlien.damage, Attributes.RegularAlien.endurance));
+		System.out.println(Messages.alienDescription(Messages.DESTROYER_ALIEN_DESCRIPTION, Attributes.DestroyerAlien.points,  Attributes.DestroyerAlien.damage, Attributes.DestroyerAlien.endurance));
+		System.out.println(Messages.alienDescription(Messages.UFO_DESCRIPTION, Attributes.Ufo.points,  Attributes.Ufo.damage,  Attributes.Ufo.endurance));
 		return false;
 	}
 	
@@ -178,7 +178,7 @@ public class Game {
 		points = 0;
 		resetBoard();
         initialize();
-        player.reset();
+        player = new UCMShip(this);
 		fill(player);
 		return false;
 	}
@@ -222,12 +222,8 @@ public class Game {
 		}
 	}
 	
-	public int getUCMHealth() {
-		return player.getHealth();
-	}
-	
 	public boolean shoot() {
-		if ((boolean) state.get("laser")) {
+		if (state.get("laser")) {
 			System.out.println(Messages.LASER_ERROR);
 			return false;
 		} else {
@@ -323,6 +319,7 @@ public class Game {
 		resetBoard();
 		
 		orienter();
+		
 		cycles += 1;
 		
 		Iterator<Entity> iterator = entities.iterator();

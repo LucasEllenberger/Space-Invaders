@@ -32,17 +32,16 @@ public class Position {
 		this.col = col;
 	}
 	
-	public void setShipSpawn() {
-		this.col = 4;
-		this.row = 7;
-	}
-	
 	public static boolean onBorder(Position position) {
 		int col = position.getCol();
 		if (col == 0 || col == Game.DIM_X - 1) {
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean onLastRow(Position position) {
+		return (position.getRow() == (Game.DIM_Y - 1));
 	}
 	
 	public static boolean outside(Position position) {

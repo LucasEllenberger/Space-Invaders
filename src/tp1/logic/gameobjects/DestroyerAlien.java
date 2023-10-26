@@ -38,13 +38,6 @@ public class DestroyerAlien implements Entity{
 		return position;
 	}
 	
-	public int getPoints() {
-		return points;
-	}
-	
-	public int getDamage() {
-		return damage;
-	}
 	
 	public int getID() {
 		return id;
@@ -84,10 +77,6 @@ public class DestroyerAlien implements Entity{
 	
 	public static void changeDirection(Move move) {
 		dir = move;
-	}
-	
-	public boolean onLastRow() {
-		return (position.getRow() == (game.DIM_Y - 1));
 	}
 	
 	public boolean reduceHealth(int damage)  {

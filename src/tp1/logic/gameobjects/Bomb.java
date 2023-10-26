@@ -12,14 +12,12 @@ public class Bomb implements Entity {
 	private Position position;
 	private DestroyerAlien ship;
 	private int damage = 1;
-	private int id;
 	
 	
 	public Bomb(DestroyerAlien ship, Game game) {
 		this.game = game;
 		this.position = new Position(ship.getPosition().getCol(), ship.getPosition().getRow());
 		this.ship = ship;
-		this.id = ship.getID();
 	}
 	
 	public String getSymbol() {
@@ -34,9 +32,6 @@ public class Bomb implements Entity {
 		return damage;
 	}
 	
-	public int getID() {
-		return id;
-	}
 	
 	/**
 	 *  Method called when the bomb disappears from the board

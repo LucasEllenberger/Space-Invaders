@@ -40,11 +40,6 @@ public class UCMShip implements Entity {
 		return false;
 	}
 	
-	public void reset() {
-		position.setShipSpawn();
-		health = 3;
-	}
-	
 	public boolean reduceHealth(int damage) {
 		health -= damage;
 		if (health <= 0) {
