@@ -12,7 +12,6 @@ public class Bomb implements Entity {
 	private Position position;
 	private DestroyerAlien ship;
 	
-	
 	public Bomb(DestroyerAlien ship, Game game) {
 		this.game = game;
 		this.position = new Position(ship.getPosition());
@@ -27,17 +26,10 @@ public class Bomb implements Entity {
 		return position;
 	}
 	
-	
-	/**
-	 *  Method called when the bomb disappears from the board
-	 */
 	private void die() {
 		ship.enableBomb();
 	}
 
-	/**
-	 *  Implements the automatic movement of the laser	
-	 */
 	public boolean automaticMove () {
 		Position.update(position, dir);
 		if(Position.outside(position)) {

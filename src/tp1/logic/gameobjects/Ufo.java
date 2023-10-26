@@ -8,35 +8,24 @@ import tp1.view.Messages;
 
 public class Ufo implements Entity{
 
-	private static Move dir = Move.LEFT;
 	private Position position;
 	private int health = 1;
-	private int points = 25;
 	private Game game;
 
 	public Ufo(Game game) {
 		this.game = game;
 	}
 	
-	public void onDelete() {
-		die();
-	}
-	
 	public boolean computerAction() {
-		if(!game.getState("ufo") && canGenerateRandomUfo()) {
+		if(!game.getState("ufo") && game.getRandom().nextDouble() < game.getLevel().getUfoFrequency()) {
 			health = 1;
-			position = new Position(game.DIM_X - 1, 0);
+			position = new Position(Game.DIM_X - 1, 0);
 			game.add(this);
 			game.changeState("ufo", true);	
 			return true;
 		}
 		return false;
 	}
-	
-	private boolean canGenerateRandomUfo(){
-		return game.getRandom().nextDouble() < game.getLevel().getUfoFrequency();
-	}
-
 
 	public String getSymbol() {
 		return String.format(Messages.GAME_OBJECT_STATUS, Messages.UFO_SYMBOL, health);
@@ -46,12 +35,8 @@ public class Ufo implements Entity{
 		return position;
 	}
 	
-	public int getPoints() {
-		return points;
-	}
-
 	public boolean automaticMove() {
-		Position.update(position, dir);
+		Position.update(position, Move.LEFT);
 		if(Position.outside(position)) {
 			game.changeState("ufo", false);
 			return false;
@@ -68,7 +53,7 @@ public class Ufo implements Entity{
 		health -= damage;
 		if (health <= 0) {
 			position = null;
-			game.addPoints(points);
+			game.addPoints(Attributes.Ufo.points);
 			game.changeState("shockwave", true);
 			die();
 			return true;

@@ -1,6 +1,5 @@
 package tp1.logic;
 
-import tp1.control.Controller;
 import tp1.view.Messages;
 
 /**
@@ -12,8 +11,7 @@ public class Position {
 
 	private int col;
 	private int row;
-
-	//TODO fill your code
+	
 	public Position(int col, int row) {
 		this.col = col;
 		this.row = row;

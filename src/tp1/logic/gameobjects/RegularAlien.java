@@ -5,11 +5,6 @@ import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
-/**
- * 
- * Class representing a regular alien
- *
- */
 public class RegularAlien implements Entity{
 
 	private static Move dir;
@@ -32,10 +27,7 @@ public class RegularAlien implements Entity{
 	public Position getPosition() {
 		return position;
 	}
-	
-	/**
-	 *  Implements the automatic movement of the regular alien	
-	 */
+
 	public boolean automaticMove() {
 		if (game.shouldMove()) {
 			Position.update(position, dir);
@@ -49,7 +41,6 @@ public class RegularAlien implements Entity{
 	public static void changeDirection(Move move) {
 		dir = move;
 	}
-	
 	
 	public boolean reduceHealth(int damage)  {
 		this.health -= damage;

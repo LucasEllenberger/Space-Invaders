@@ -35,11 +35,6 @@ public class DestroyerAlien implements Entity{
 		return position;
 	}
 	
-	
-	
-	/**
-	 *  Implements the automatic movement of the regular alien	
-	 */
 	public boolean automaticMove() {
 		if (game.shouldMove()) {
 			Position.update(position, dir);
@@ -47,9 +42,7 @@ public class DestroyerAlien implements Entity{
 				game.changeState("edge", true);
 			}
 		}
-		if (canBomb) {
-			dropBomb();
-		}
+		dropBomb();
 		return true;
 	}
 	
@@ -57,12 +50,8 @@ public class DestroyerAlien implements Entity{
 		canBomb = true;
 	}
 	
-	private boolean canDropBomb(){
-		return game.getRandom().nextDouble() < game.getLevel().getShootFrequency();
-	}
-	
 	public void dropBomb() {
-		if (canDropBomb()) {
+		if (canBomb && game.getRandom().nextDouble() < game.getLevel().getShootFrequency()) {
 			currBomb = new Bomb(this, game);
 			game.addTemp(currBomb);
 			canBomb = false;

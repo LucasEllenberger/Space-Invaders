@@ -300,7 +300,6 @@ public class Game {
 	}
 	
 	private void automaticMoves() {
-
 		Iterator<Entity> iterator = entities.iterator();
 		while (iterator.hasNext()) {
 			Entity entity = iterator.next();

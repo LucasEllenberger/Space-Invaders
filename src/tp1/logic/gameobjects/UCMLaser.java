@@ -5,11 +5,6 @@ import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
-/**
- * 
- * Class that represents the laser fired by {@link UCMShip}
- *
- */
 public class UCMLaser implements Entity{
 
 	private Move dir = Move.UP;
@@ -36,17 +31,11 @@ public class UCMLaser implements Entity{
 		return damage;
 	}
 	
-	/**
-	 *  Method called when the laser disappears from the board
-	 */
 	private void die() {
 		game.remove(this);
 		game.changeState("laser", false);
 	}
 
-	/**
-	 *  Implements the automatic movement of the laser	
-	 */
 	public boolean automaticMove () {
 		Position.update(position, dir);
 		if(Position.outside(position)) {
