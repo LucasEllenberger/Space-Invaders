@@ -5,13 +5,14 @@ import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
+/**
+ *  Logic/schema for UCMLasers, the projectiles produced by UCMShip
+ *
+ */
 public class UCMLaser implements Entity{
 
-	private Move dir = Move.UP;
 	private Game game;
 	private Position position;
-	private int damage = 1;
-	
 	
 	public UCMLaser(UCMShip ship, Game game) {
 		this.game = game;
@@ -27,8 +28,9 @@ public class UCMLaser implements Entity{
 		return position;
 	}
 	
-	public int getDamage() {
-		return damage;
+	public boolean reduceHealth(int damage) {
+		die();
+		return true;
 	}
 	
 	private void die() {
@@ -37,7 +39,7 @@ public class UCMLaser implements Entity{
 	}
 
 	public boolean automaticMove () {
-		Position.update(position, dir);
+		Position.update(position, Move.UP);
 		if(Position.outside(position)) {
 			die();
 			return false;
@@ -45,14 +47,17 @@ public class UCMLaser implements Entity{
 		return true;
 	}
 
-	public boolean reduceHealth(int damage) {
-		die();
-		return true;
-	}
+	/**
+	 * Attacks an entity using the coded damage value
+	 * 
+	 * @param entity Entity to be attacked
+	 * @return A boolean describing whether the entity was something that can be attacked (not Space)
+	 */
 	
 	public boolean attack(Entity entity) {
+		
 		if (!(entity instanceof Space)) {
-			if (entity.reduceHealth(damage)) {
+			if (entity.reduceHealth(1)) {
 				game.remove(entity);
 			}
 			die();

@@ -1,19 +1,21 @@
 package tp1.logic.gameobjects;
 
-import tp1.logic.Game;
 import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
+
+
+/**
+ * Class implementing bombs, the projectiles produced by DestroyerAliens
+ */
+
 public class Bomb implements Entity {
 
-	private Move dir = Move.DOWN;
-	private Game game;
 	private Position position;
 	private DestroyerAlien ship;
 	
-	public Bomb(DestroyerAlien ship, Game game) {
-		this.game = game;
+	public Bomb(DestroyerAlien ship) {
 		this.position = new Position(ship.getPosition());
 		this.ship = ship;
 	}
@@ -29,9 +31,14 @@ public class Bomb implements Entity {
 	private void die() {
 		ship.enableBomb();
 	}
-
+	
+	public boolean reduceHealth(int damage) {
+		die();
+		return true;
+	}
+	
 	public boolean automaticMove () {
-		Position.update(position, dir);
+		Position.update(position, Move.DOWN);
 		if(Position.outside(position)) {
 			die();
 			return false;
@@ -39,9 +46,5 @@ public class Bomb implements Entity {
 		return true;
 	}
 
-	public boolean reduceHealth(int damage) {
-		die();
-		return true;
-	}
-	
+
 }

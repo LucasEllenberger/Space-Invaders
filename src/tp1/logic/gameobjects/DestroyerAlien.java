@@ -5,17 +5,12 @@ import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
-/**
- * 
- * Class representing a regular alien
- *
- */
 public class DestroyerAlien implements Entity{
 
-	private static Move dir;
+	private static Move direction = Move.LEFT;
+	private Bomb currBomb;
 	private Game game;
 	private Position position;
-	private Bomb currBomb;
 	private int health = 1;
 	private int points = 10;
 	private boolean canBomb = true;
@@ -23,7 +18,6 @@ public class DestroyerAlien implements Entity{
 	public DestroyerAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
-		dir = game.getDirection();
 		game.add(this);
 	}
 	
@@ -35,10 +29,18 @@ public class DestroyerAlien implements Entity{
 		return position;
 	}
 	
+	public static void changeDirection(Move move) {
+		direction = move;
+	}
+	
+	public void enableBomb() {
+		canBomb = true;
+	}
+	
 	public boolean automaticMove() {
 		if (game.shouldMove()) {
-			Position.update(position, dir);
-			if (Position.onBorder(position) && !dir.equals(Move.DOWN)) {
+			Position.update(position, direction);
+			if (Position.onBorder(position) && !direction.equals(Move.DOWN)) {
 				game.changeState("edge", true);
 			}
 		}
@@ -46,20 +48,12 @@ public class DestroyerAlien implements Entity{
 		return true;
 	}
 	
-	public void enableBomb() {
-		canBomb = true;
-	}
-	
 	public void dropBomb() {
 		if (canBomb && game.getRandom().nextDouble() < game.getLevel().getShootFrequency()) {
-			currBomb = new Bomb(this, game);
+			currBomb = new Bomb(this);
 			game.addTemp(currBomb);
 			canBomb = false;
 		}
-	}
-	
-	public static void changeDirection(Move move) {
-		dir = move;
 	}
 	
 	public boolean reduceHealth(int damage)  {

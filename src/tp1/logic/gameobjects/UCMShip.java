@@ -4,11 +4,14 @@ import tp1.logic.Game;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
+/**
+ * Logic/schema for UCMShip, the object representing the player.
+ */
 public class UCMShip implements Entity {
 	
+	private Game game;
 	private Position position;
 	private int health = 3;
-	private Game game;
 	
 	public UCMShip(Game game) {
 		this.position = new Position(4, 7);

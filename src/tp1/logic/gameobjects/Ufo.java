@@ -6,25 +6,19 @@ import tp1.logic.Position;
 import tp1.view.Messages;
 
 
+/**
+ * Logic/schema for UFO functionality. The UFO is only instantiated once. We provide functionality by 
+ * resetting positions and choosing whether to display it.
+ */
+
 public class Ufo implements Entity{
 
+	private Game game;
 	private Position position;
 	private int health = 1;
-	private Game game;
 
 	public Ufo(Game game) {
 		this.game = game;
-	}
-	
-	public boolean computerAction() {
-		if(!game.getState("ufo") && game.getRandom().nextDouble() < game.getLevel().getUfoFrequency()) {
-			health = 1;
-			position = new Position(Game.DIM_X - 1, 0);
-			game.add(this);
-			game.changeState("ufo", true);	
-			return true;
-		}
-		return false;
 	}
 
 	public String getSymbol() {
@@ -35,6 +29,11 @@ public class Ufo implements Entity{
 		return position;
 	}
 	
+	private void die() {
+		game.changeState("ufo", false);
+		game.remove(this);
+	}
+	
 	public boolean automaticMove() {
 		Position.update(position, Move.LEFT);
 		if(Position.outside(position)) {
@@ -43,10 +42,23 @@ public class Ufo implements Entity{
 		}
 		return true;
 	}
-
-	private void die() {
-		game.changeState("ufo", false);
-		game.remove(this);
+	
+	/**
+	 * Attempt to spawn a UFO
+	 * 
+	 * @return A boolean representing whether a UFO was created 
+	 */
+	
+	public boolean computerAction() {
+		
+		if(!game.getState("ufo") && game.getRandom().nextDouble() < game.getLevel().getUfoFrequency()) {
+			health = 1;
+			position = new Position(Game.DIM_X - 1, 0);
+			game.add(this);
+			game.changeState("ufo", true);	
+			return true;
+		}
+		return false;
 	}
 
 	public boolean reduceHealth(int damage) {

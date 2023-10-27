@@ -21,6 +21,12 @@ import tp1.logic.gameobjects.Space;
 import tp1.logic.gameobjects.Ufo;
 import tp1.view.Messages;
 
+
+
+/**
+ * Class that implements the core logic of the game. Resolves all commands from the Controller
+ */
+
 public class Game {
 
 	public static final int DIM_X = 9;
@@ -45,8 +51,11 @@ public class Game {
          put("running", true);
          put("ufo", false);
          put("shockwave", false);
-     }};
-
+    }};
+	private Map<String, Integer> metrics = new HashMap<String, Integer>() {{
+	     put("points", 0);
+	}};
+  
 	public Game(Level level, long seed) {
         this.level = level;
         this.speed = level.getSpeed();
@@ -63,6 +72,61 @@ public class Game {
 	public boolean getState(String field) {
 		return state.get(field);
 	}
+	
+	public int getMetric(String field) {
+		return metrics.get(field);
+	}
+	
+	public int getCycle() {
+		return cycles;
+	}
+	
+	public int getRemainingAliens() {
+		return numRemainingAliens;
+	}
+	
+	public Random getRandom() {
+		return this.random;
+	}
+
+	public Level getLevel() {
+		return this.level;
+	}
+	
+	public String positionToString(int col, int row) {
+		return board[row][col].getSymbol();
+	}
+
+	public boolean playerWin() {
+		return (numRemainingAliens == 0);
+	}
+	
+	public boolean remove(Entity entity) {
+		if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
+			numRemainingAliens--;
+		}
+		entities.remove(entity);
+		return true;
+	}
+	
+	public boolean add(Entity entity) {
+		entities.add(entity);
+		return true;
+	}
+	
+	public boolean addTemp(Entity entity) {
+		temp.add(entity);
+		return true;
+	}
+	
+	public boolean shouldMove() {
+		return ((cycles % (speed + 1) == 0) && (cycles != 0));
+	}
+	
+	public void addPoints(int newPoints) {
+		points += newPoints;
+	}
+	
 	
 	private void initialize() {
 		switch (level.name()) {
@@ -111,26 +175,10 @@ public class Game {
 		return buffer.toString();
 	}
 
-	public int getCycle() {
-		return cycles;
-	}
+
 	
 
-	public int getRemainingAliens() {
-		return numRemainingAliens;
-	}
-	
-	public Move getDirection() {
-		return direction;
-	}
 
-	public String positionToString(int col, int row) {
-		return board[row][col].getSymbol();
-	}
-
-	public boolean playerWin() {
-		return (numRemainingAliens == 0);
-	}
 
 	public boolean aliensWin() {
 		if (player.getHealth() == 0) {
@@ -143,14 +191,6 @@ public class Game {
 			}
 		}
 		return false;
-	}
-
-	public Random getRandom() {
-		return this.random;
-	}
-
-	public Level getLevel() {
-		return this.level;
 	}
 	
 	public boolean none() {
@@ -198,9 +238,6 @@ public class Game {
 		return false;
 	}
 	
-	public void addPoints(int newPoints) {
-		points += newPoints;
-	}
 	
 	public boolean shockwave() {
 		if (state.get("shockwave")) {
@@ -232,24 +269,7 @@ public class Game {
 		}
 	}
 	
-	public boolean remove(Entity entity) {
-		if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
-			numRemainingAliens--;
-		}
-		entities.remove(entity);
-		return true;
-	}
-	
-	public boolean add(Entity entity) {
-		entities.add(entity);
-		return true;
-	}
-	
-	public boolean addTemp(Entity entity) {
-		temp.add(entity);
-		return true;
-	}
-	
+
 	public boolean move(String direction) {
 		Move move = switch (direction) {
 	    case "right" -> Move.RIGHT;
@@ -295,9 +315,7 @@ public class Game {
 		}
 	}
 	
-	public boolean shouldMove() {
-		return ((cycles % (speed + 1) == 0) && (cycles != 0));
-	}
+
 	
 	private void automaticMoves() {
 		Iterator<Entity> iterator = entities.iterator();

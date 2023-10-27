@@ -5,9 +5,12 @@ import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
+/**
+ * Logic/schema describing Regular Aliens
+ */
 public class RegularAlien implements Entity{
-
-	private static Move dir;
+	
+	private static Move direction = Move.LEFT;
 	private Game game;
 	private Position position;
 	private int health = 2;
@@ -16,7 +19,6 @@ public class RegularAlien implements Entity{
 	public RegularAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
-		dir = game.getDirection();
 		game.add(this);
 	}
 	
@@ -27,19 +29,19 @@ public class RegularAlien implements Entity{
 	public Position getPosition() {
 		return position;
 	}
+	
+	public static void changeDirection(Move move) {
+		direction = move;
+	}
 
 	public boolean automaticMove() {
 		if (game.shouldMove()) {
-			Position.update(position, dir);
-			if (Position.onBorder(position) && !dir.equals(Move.DOWN)) {
+			Position.update(position, direction);
+			if (Position.onBorder(position) && !direction.equals(Move.DOWN)) {
 				game.changeState("edge", true);
 			}
 		}
 		return true;
-	}
-	
-	public static void changeDirection(Move move) {
-		dir = move;
 	}
 	
 	public boolean reduceHealth(int damage)  {
