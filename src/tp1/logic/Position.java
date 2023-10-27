@@ -16,7 +16,6 @@ public class Position {
 		this.row = row;
 	}
 	
-	
 	/**
 	 * Alternate constructor for when you desire to create a copy of a Position
 	 * 
@@ -64,7 +63,6 @@ public class Position {
 		return false;
 	}
 	
-	
 	/**
 	 * Attempts to update a Position, but errors and alerts if the update is invalid
 	 * 
@@ -99,6 +97,4 @@ public class Position {
 		int newCol = position.getCol() + move.getX();
 		position.set(newRow, newCol);
  	}
-	
-
 }

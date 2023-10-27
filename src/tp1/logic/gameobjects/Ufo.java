@@ -43,6 +43,18 @@ public class Ufo implements Entity{
 		return true;
 	}
 	
+	public boolean reduceHealth(int damage) {
+		health -= damage;
+		if (health <= 0) {
+			position = null;
+			game.changeMetric("points", Attributes.Ufo.points);
+			game.changeState("shockwave", true);
+			die();
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Attempt to spawn a UFO
 	 * 
@@ -56,18 +68,6 @@ public class Ufo implements Entity{
 			position = new Position(Game.DIM_X - 1, 0);
 			game.add(this);
 			game.changeState("ufo", true);	
-			return true;
-		}
-		return false;
-	}
-
-	public boolean reduceHealth(int damage) {
-		health -= damage;
-		if (health <= 0) {
-			position = null;
-			game.addPoints(Attributes.Ufo.points);
-			game.changeState("shockwave", true);
-			die();
 			return true;
 		}
 		return false;

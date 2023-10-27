@@ -5,6 +5,10 @@ import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
 
+/**
+ * Logic/schema describing Destroyer Aliens
+ */
+
 public class DestroyerAlien implements Entity{
 
 	private static Move direction = Move.LEFT;
@@ -12,7 +16,6 @@ public class DestroyerAlien implements Entity{
 	private Game game;
 	private Position position;
 	private int health = 1;
-	private int points = 10;
 	private boolean canBomb = true;
 	
 	public DestroyerAlien(Game game, Position position) {
@@ -48,20 +51,26 @@ public class DestroyerAlien implements Entity{
 		return true;
 	}
 	
+	public boolean reduceHealth(int damage)  {
+		this.health -= damage;
+		if (health <= 0) {
+			game.changeMetric("points", Attributes.DestroyerAlien.points);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Attempts to spawn a bomb from the reference ship
+	 */
+	
 	public void dropBomb() {
+		
 		if (canBomb && game.getRandom().nextDouble() < game.getLevel().getShootFrequency()) {
 			currBomb = new Bomb(this);
 			game.addTemp(currBomb);
 			canBomb = false;
 		}
-	}
-	
-	public boolean reduceHealth(int damage)  {
-		this.health -= damage;
-		if (health <= 0) {
-			game.addPoints(points);
-			return true;
-		}
-		return false;
 	}
 }

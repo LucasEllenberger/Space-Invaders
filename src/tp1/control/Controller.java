@@ -45,7 +45,7 @@ public class Controller {
 		//TODO fill your code
 		printGame();
 		boolean result = true;
-		while (game.running() && !game.playerWin() && !game.aliensWin()) {
+		while (game.getState("running" )&& !game.playerWin() && !game.aliensWin()) {
 			result = new_handler(prompt());
 			// checkUpdate will be false when the command doesn't require a board update
 			// used in help command
