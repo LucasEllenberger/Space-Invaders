@@ -37,7 +37,7 @@ public class Bomb implements Entity {
 		return true;
 	}
 	
-	public boolean automaticMove () {
+	public boolean automaticMove() {
 		Position.update(position, Move.DOWN);
 		if(Position.outside(position)) {
 			die();
@@ -45,6 +45,4 @@ public class Bomb implements Entity {
 		}
 		return true;
 	}
-
-
 }

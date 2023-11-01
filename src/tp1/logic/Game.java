@@ -178,13 +178,12 @@ public class Game {
 	}
 	
 	/**
-	 * Returns a value that determines when it is permitted to move for entites that are affected by speed
+	 * Returns a value that determines when it is permitted to move for entities that are affected by speed
 	 * 
 	 * @return A boolean representing whether the cycle and speed coincide
 	 */
 	
 	public boolean shouldMove() {
-		
 		return ((getMetric("cycles") % (getMetric("speed") + 1) == 0) && (getMetric("cycles")  != 0));
 	}
 	
@@ -214,7 +213,7 @@ public class Game {
 	
 	/**
 	 * Helper method that creates and fills an arbitrary amount of
-	 * entities that have (Game, Posiition) constructors to the center of a given row
+	 * entities that have (Game, Position) constructors to the center of a given row
 	 * 
 	 * @param row Row to fill entities in
 	 * @param amount How many entities to put in the row
@@ -223,7 +222,6 @@ public class Game {
 	 */
 	
 	private void fillMany(int row, int amount, Class clazz) {
-		
 		int start = (DIM_X - amount) / 2;
 		try {
 			Constructor constructor = clazz.getDeclaredConstructor(Game.class, Position.class);
@@ -235,8 +233,6 @@ public class Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-      		
-		
 	}
 
 	/**
@@ -293,6 +289,7 @@ public class Game {
 	public boolean reset() {
 		temp.clear();
 		entities.clear();
+		direction = Move.LEFT;
 		changeState("laser", false);
 		changeState("edge", false);
 		changeState("running", true);
@@ -320,7 +317,7 @@ public class Game {
 	}	
 	
 	/**
-	 * Executes "help" command 
+	 * Executes "exit" command 
 	 * 
 	 * @returns false, to not update the game
 	 */
@@ -504,6 +501,8 @@ public class Game {
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
 		if (playerPosition instanceof Bomb) {
 			player.reduceHealth(Attributes.DestroyerAlien.damage);
+			playerPosition.reduceHealth(1);
+			remove(playerPosition);
 		}
 		fill(player);
 	}
