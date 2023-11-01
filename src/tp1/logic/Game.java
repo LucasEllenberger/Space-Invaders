@@ -512,11 +512,11 @@ public class Game {
 	 */
 	
 	public void next(){
+		changeMetric("cycles", 1);
 		resetBoard();
 		orienter();
 		automaticMoves();
 		resolveLaser();
 		resolvePlayer();
-		changeMetric("cycles", 1);
 	}
 }

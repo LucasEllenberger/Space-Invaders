@@ -97,7 +97,7 @@ public class Messages {
 	//
 	// Game Objects
 	//
-	public static final String GAME_OBJECT_STATUS = "%2s[%d]";
+	public static final String GAME_OBJECT_STATUS = "%2s[0%d]";
 
 	public static final String ALIEN_DESCRIPTION = "%s: points='%d', damage='%d', endurance='%d'";
 

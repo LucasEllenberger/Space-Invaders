@@ -76,7 +76,7 @@ public class Controller {
 	 */
 	private boolean new_handler(String[] command) {
 		if (command.length == 0) {
-			return errorHandler(Messages.INVALID_COMMAND);
+			return errorHandler(Messages.UNKNOWN_COMMAND);
 		} else if (command[0].toLowerCase().equals("r") || command[0].toLowerCase().equals("reset")) {
 			game.reset();
 			printGame();
@@ -92,14 +92,14 @@ public class Controller {
 		    case "h", "help" -> game.help();
 		    case "e", "exit" -> game.exit();
 		    case "m", "move" -> moveHandler(command);
-		    default -> errorHandler(Messages.INVALID_COMMAND);
+		    default -> errorHandler(Messages.UNKNOWN_COMMAND);
 			};
 		}
 	}
 
 	private boolean moveHandler(String[] command) {
 		if (command.length < 2) {
-			return errorHandler(Messages.INVALID_COMMAND);
+			return errorHandler(Messages.UNKNOWN_COMMAND);
 		} else {
 			return switch (command[1].toLowerCase()) {
 			case "lleft", "left", "right", "rright", "up", "down", "none" -> game.move(command[1].toLowerCase());
