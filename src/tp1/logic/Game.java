@@ -445,6 +445,7 @@ public class Game {
 		
 		temp.clear();
 		
+		// ufo can spawn on the same turn it died! not good!
 		if (!state.get("ufo") && ufo.computerAction()) {
 			fill(ufo);
 		}
