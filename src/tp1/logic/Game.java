@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.lang.reflect.Constructor;
@@ -40,8 +43,8 @@ public class Game {
 	private UCMLaser currentLaser;
 	private Ufo ufo = new Ufo(this);
 	private Entity[][] board;
-	private Set<Entity> entities = new HashSet<Entity>();
-	private Set<Entity> temp = new HashSet<Entity>();
+	private List<Entity> entities = new ArrayList<Entity>();
+	private List<Entity> temp = new ArrayList<Entity>();
 	private Map<String, Boolean> state = new HashMap<String, Boolean>() {{
          put("laser", false);
          put("edge", false);
