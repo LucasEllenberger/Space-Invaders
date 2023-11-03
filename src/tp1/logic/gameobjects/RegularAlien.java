@@ -18,6 +18,7 @@ public class RegularAlien implements Entity{
 	public RegularAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		game.changeMetric("aliens", 1);
 		game.add(this);
 	}
 	
@@ -47,6 +48,7 @@ public class RegularAlien implements Entity{
 		this.health -= damage;
 		if (health <= 0) {
 			game.changeMetric("points", Attributes.RegularAlien.points);
+			game.changeMetric("aliens", -1);
 			return true;
 		}
 		return false;

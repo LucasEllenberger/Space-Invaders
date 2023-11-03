@@ -31,6 +31,7 @@ public class Game {
 
 	public static final int DIM_X = 9;
 	public static final int DIM_Y = 8;
+	private long seed;
 	private Move direction = Move.LEFT;
 	private Level level;
 	private Random random;
@@ -53,10 +54,12 @@ public class Game {
 	     put("cycles", 0);
 	     put("aliens", 0);
 	     put("speed", 0);
+	     put("wait", 0);
 	}};
   
 	public Game(Level level, long seed) {
         this.level = level;
+        this.seed = seed;
         this.random = new Random(seed);
         changeMetric("speed", level.getSpeed());
         resetBoard();
@@ -104,7 +107,6 @@ public class Game {
 	 */
 	
 	public boolean getState(String field) {
-		
 		return state.get(field);
 	}
 	
@@ -138,7 +140,6 @@ public class Game {
 	 */
 	
 	public boolean playerWin() {
-		
 		return (getMetric("aliens") == 0);
 	}
 		
@@ -149,9 +150,6 @@ public class Game {
 	 */
 	
 	public void remove(Entity entity) {
-		if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
-			changeMetric("aliens", -1);
-		}
 		entities.remove(entity);
 	}
 	
@@ -184,7 +182,7 @@ public class Game {
 	 */
 	
 	public boolean shouldMove() {
-		return ((getMetric("cycles") % (getMetric("speed") + 1) == 0) && (getMetric("cycles")  != 0));
+		return (getState("edge") || (getMetric("wait") == getMetric("speed")));
 	}
 	
 	/**
@@ -192,23 +190,12 @@ public class Game {
 	 */
 	
 	private void initialize() {
-		switch (level.name()) {
-		case "INSANE":  
-			fillMany(1, 4, RegularAlien.class);
-			fillMany(2, 4, RegularAlien.class);
-			fillMany(3, 4, DestroyerAlien.class);
-			break;
-		case "HARD": 
-			fillMany(1, 4, RegularAlien.class);
-			fillMany(2, 4, RegularAlien.class);
-			fillMany(3, 2, DestroyerAlien.class);
-			break;
-		case "EASY": 
-			fillMany(1, 4, RegularAlien.class); 
-			fillMany(2, 2, DestroyerAlien.class);
-			break;
-	    default: Controller.commandError();
+		int currRow = 1;
+		for (int i = 0; i < level.getNumRowsRegularAliens(); i++) {
+			fillMany(currRow, level.getNumRegularAliens() / level.getNumRowsRegularAliens(), RegularAlien.class);
+			currRow++;
 		}
+		fillMany(currRow, level.getNumDestroyerAliens(), DestroyerAlien.class);
 	}
 	
 	/**
@@ -228,7 +215,6 @@ public class Game {
 			for (int j = 0; j < amount; j++) {
 				Position position = new Position(start + j, row);
 	            board[row][start + j] = (Entity) constructor.newInstance(this, position);
-	            changeMetric("aliens", 1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -242,7 +228,6 @@ public class Game {
 	 */
 	
 	public boolean aliensWin() {
-		
 		if (player.getHealth() == 0) {
 			return true;
 		}
@@ -261,8 +246,7 @@ public class Game {
 	 * @returns true, to update the game
 	 */
 	
-	public boolean none() {
-		
+	public boolean none() {	
 		return true;
 	}
 	
@@ -290,6 +274,7 @@ public class Game {
 		temp.clear();
 		entities.clear();
 		direction = Move.LEFT;
+		random = new Random(seed);
 		changeState("laser", false);
 		changeState("edge", false);
 		changeState("running", true);
@@ -298,6 +283,7 @@ public class Game {
 		changeMetric("points", -getMetric("points"));
 		changeMetric("cycles", -getMetric("cycles"));
 		changeMetric("aliens", -getMetric("aliens"));
+		changeMetric("wait", -getMetric("wait"));
 		resetBoard();
         initialize();
         player = new UCMShip(this);
@@ -342,7 +328,6 @@ public class Game {
 				if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
 					if (entity.reduceHealth(1)) {
 						iterator.remove();
-						changeMetric("aliens", -1);
 					}
 				}
 			}
@@ -420,7 +405,6 @@ public class Game {
 			if (state.get("edge")) {
 				RegularAlien.changeDirection(Move.DOWN);
 				DestroyerAlien.changeDirection(Move.DOWN);
-				changeState("edge", !state.get("edge"));
 				if (direction.equals(Move.LEFT)) {
 					direction = Move.RIGHT;
 				} else {
@@ -460,6 +444,21 @@ public class Game {
 		
 		if (!state.get("ufo") && ufo.computerAction()) {
 			fill(ufo);
+		}
+	}
+	
+	/**
+	 * Properly resolves edge game state and wait time after allowing ships to move
+	 */
+	
+	private void resolveWaitTime() {
+		if (shouldMove()) {
+			if (getState("edge") && !(getMetric("wait") == getMetric("speed"))) {
+				changeState("edge", !state.get("edge"));
+			}
+			changeMetric("wait", -getMetric("wait"));
+		} else {
+			changeMetric("wait", 1);
 		}
 	}
 	
@@ -516,6 +515,7 @@ public class Game {
 		resetBoard();
 		orienter();
 		automaticMoves();
+		resolveWaitTime();
 		resolveLaser();
 		resolvePlayer();
 	}

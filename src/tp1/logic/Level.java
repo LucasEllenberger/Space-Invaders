@@ -38,12 +38,36 @@ public enum Level {
 		return ufoFrequency;
 	}
 	
+	/**
+	 * Returns Shoot Frequency corresponding the Level
+	 * @return Shoot Frequency
+	 */
 	public double getShootFrequency() {
 		return shootFrequency;
 	}
 	
+	/**
+	 * Returns Number of Destroyer Aliens corresponding the Level
+	 * @return Number of Destroyer Aliens
+	 */
 	public int getNumDestroyerAliens() {
 		return numDestroyerAliens;
+	}
+	
+	/**
+	 * Returns Number of Regular Aliens corresponding the Level
+	 * @return Number of Regular Aliens
+	 */
+	public int getNumRegularAliens() {
+		return numRegularAliens;
+	}
+	
+	/**
+	 * Returns Number of Regular Alien Rows corresponding the Level
+	 * @return Number of Regular Alien Rows
+	 */
+	public int getNumRowsRegularAliens() {
+		return numRowsRegularAliens;
 	}
 
 	/**

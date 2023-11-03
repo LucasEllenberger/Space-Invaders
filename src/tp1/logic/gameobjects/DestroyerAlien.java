@@ -21,6 +21,7 @@ public class DestroyerAlien implements Entity{
 	public DestroyerAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		game.changeMetric("aliens", 1);
 		game.add(this);
 	}
 	
@@ -55,6 +56,7 @@ public class DestroyerAlien implements Entity{
 		this.health -= damage;
 		if (health <= 0) {
 			game.changeMetric("points", Attributes.DestroyerAlien.points);
+			game.changeMetric("aliens", -1);
 			return true;
 		}
 		return false;
