@@ -425,6 +425,7 @@ public class Game {
 	 */
 	
 	private void automaticMoves() {
+		boolean spawnUFO = !state.get("ufo");
 		Iterator<Entity> iterator = entities.iterator();
 		while (iterator.hasNext()) {
 			Entity entity = iterator.next();
@@ -435,7 +436,6 @@ public class Game {
 			}
 		}
 		
-		
 		for (Entity entity : temp) {
 			if (entity.automaticMove()) {
 				entities.add(entity);
@@ -444,9 +444,8 @@ public class Game {
 		}
 		
 		temp.clear();
-		
-		// ufo can spawn on the same turn it died! not good!
-		if (!state.get("ufo") && ufo.computerAction()) {
+
+		if (spawnUFO && ufo.computerAction()) {
 			fill(ufo);
 		}
 	}

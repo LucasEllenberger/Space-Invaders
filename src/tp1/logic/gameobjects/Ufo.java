@@ -62,7 +62,6 @@ public class Ufo implements Entity{
 	 */
 	
 	public boolean computerAction() {
-		
 		if(!game.getState("ufo") && game.getRandom().nextDouble() < game.getLevel().getUfoFrequency()) {
 			health = 1;
 			position = new Position(Game.DIM_X - 1, 0);
