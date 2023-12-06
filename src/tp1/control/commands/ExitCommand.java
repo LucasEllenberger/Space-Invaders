@@ -8,7 +8,7 @@ public class ExitCommand extends NoParamsCommand{
 		  		
 		@Override
 		public ExecutionResult execute(Game game) {
-			game.exit();
+			game.changeState("running", false);
 			return new ExecutionResult(false);
 		}
 

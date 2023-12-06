@@ -240,8 +240,7 @@ public class Game {
 			return true;
 		}
 		for (Entity entity : entities) {
-			if ((entity instanceof RegularAlien || entity instanceof DestroyerAlien) 
-					&& Position.onLastRow(entity.getPosition())) {
+			if (entity instanceof EnemyShip && Position.onLastRow(entity.getPosition())) {
 				return true;
 			}
 		}
@@ -439,18 +438,12 @@ public class Game {
 		if (state.get("laser")) {
 			Entity entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
 			if (currentLaser.attack(entity)) {
-				if (entity instanceof Bomb) {
-					remove(entity);
-				}
 				if (!entities.contains(entity)) {
 					board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
 				}
 			} else if (currentLaser.automaticMove()) {
 				entity = board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()];
 				if (currentLaser.attack(entity)) {
-					if (entity instanceof Bomb) {
-						remove(entity);
-					}
 					if (!entities.contains(entity)) {
 						board[currentLaser.getPosition().getRow()][currentLaser.getPosition().getCol()] = space;
 					}

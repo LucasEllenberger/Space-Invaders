@@ -1,5 +1,6 @@
 package tp1.logic.gameobjects;
 
+import tp1.logic.Game;
 import tp1.logic.Move;
 import tp1.logic.Position;
 import tp1.view.Messages;
@@ -14,8 +15,9 @@ public class Bomb extends EnemyWeapon {
 
 	private DestroyerAlien ship;
 	
-	public Bomb(DestroyerAlien ship) {
+	public Bomb(DestroyerAlien ship, Game game) {
 		this.ship = ship;
+		this.game = game;
 		position = new Position(ship.getPosition());
 	}
 	
@@ -29,6 +31,7 @@ public class Bomb extends EnemyWeapon {
 
 	public boolean reduceHealth(int damage) {
 		ship.enableBomb();
+		game.remove(this);
 		return true;
 	}
 	
