@@ -77,7 +77,6 @@ public class Position {
 		int newRow = position.getRow() + move.getY();
 		int newCol = position.getCol() + move.getX();
 		if (newRow < 0 || newCol < 0 || newRow >= Game.DIM_Y || newCol >= Game.DIM_X) {
-			System.out.println(Messages.MOVEMENT_ERROR);
 			return false;
 		} else {
 			position.set(newRow, newCol);

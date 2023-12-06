@@ -254,20 +254,6 @@ public class Game {
 	}
 	
 	/**
-	 * Executes "list" command 
-	 * 
-	 * @returns false, to not update the game
-	 */
-	
-	public boolean list() {
-		System.out.println(Messages.ucmShipDescription(Messages.UCMSHIP_DESCRIPTION, Attributes.Player.endurance,  Attributes.Player.damage));
-		System.out.println(Messages.alienDescription(Messages.REGULAR_ALIEN_DESCRIPTION, Attributes.RegularAlien.points, Attributes.RegularAlien.damage, Attributes.RegularAlien.endurance));
-		System.out.println(Messages.alienDescription(Messages.DESTROYER_ALIEN_DESCRIPTION, Attributes.DestroyerAlien.points,  Attributes.DestroyerAlien.damage, Attributes.DestroyerAlien.endurance));
-		System.out.println(Messages.alienDescription(Messages.UFO_DESCRIPTION, Attributes.Ufo.points,  Attributes.Ufo.damage,  Attributes.Ufo.endurance));
-		return false;
-	}
-	
-	/**
 	 * Executes "reset" command 
 	 * 
 	 * @returns false, to not update the game
@@ -293,18 +279,7 @@ public class Game {
 		fill(player);
 		return false;
 	}
-	
-	/**
-	 * Executes "help" command 
-	 * 
-	 * @returns false, to not update the game
-	 */
-	
-	public boolean help() {
-		System.out.println(Messages.HELP);
-		return false;
-	}	
-	
+		
 	/**
 	 * Executes "exit" command 
 	 * 
@@ -337,7 +312,6 @@ public class Game {
 			state.put("shockwave", false);
 			return true;
 		} else {
-			System.out.println(Messages.SHOCKWAVE_ERROR);
 			return false;
 		}
 	}
@@ -350,7 +324,6 @@ public class Game {
 	
 	public boolean shoot() {
 		if (state.get("laser")) {
-			System.out.println(Messages.LASER_ERROR);
 			return false;
 		} else {
 			currentLaser = new UCMLaser(player, this);
@@ -364,17 +337,7 @@ public class Game {
 	 * @returns Boolean representing whether or not move command was valid
 	 */
 
-	public boolean move(String direction) {
-		Move move = switch (direction) {
-	    case "right" -> Move.RIGHT;
-	    case "rright" -> Move.RRIGHT;
-	    case "left" -> Move.LEFT;
-	    case "lleft" -> Move.LLEFT;
-	    case "up" -> Move.UP;
-	    case "down" -> Move.DOWN;
-	    case "none" -> Move.NONE;
-	    default -> null;
-		};
+	public boolean move(Move move) {
 		return Position.updateSafe(player.getPosition(), move);
 	}
 	

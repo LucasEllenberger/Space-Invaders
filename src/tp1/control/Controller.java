@@ -2,10 +2,12 @@ package tp1.control;
 
 import static tp1.view.Messages.debug;
 
+
 import java.util.Scanner;
 
+import tp1.control.commands.Command;
+import tp1.control.commands.CommandGenerator;
 import tp1.logic.Game;
-import tp1.logic.Move;
 import tp1.view.GamePrinter;
 import tp1.view.Messages;
 
@@ -44,14 +46,18 @@ public class Controller {
 	public void run() {
 		//TODO fill your code
 		printGame();
-		boolean result = true;
 		while (game.getState("running" )&& !game.playerWin() && !game.aliensWin()) {
-			result = new_handler(prompt());
-			// checkUpdate will be false when the command doesn't require a board update
-			// used in help command
-			if (result) {
-				game.next();
-				printGame();
+			Command command = CommandGenerator.parse(prompt());
+			if (command != null) {
+				ExecutionResult result = command.execute(game);
+				if (result.success()) {
+					if (result.draw())
+						printGame();
+				} 
+				else
+					System.out.println(result.errorMessage());
+			} else {
+				System.out.println(Messages.UNKNOWN_COMMAND);
 			}
 		}
 		System.out.print(printer.endMessage());
@@ -69,57 +75,5 @@ public class Controller {
 	 */
 	public void printEndMessage() {
 		System.out.println(printer.endMessage());
-	}
-	
-	/**
-	 * Command parsing and validation
-	 */
-	private boolean new_handler(String[] command) {
-		if (command.length == 0) {
-			return errorHandler(Messages.UNKNOWN_COMMAND);
-		} else if (command[0].toLowerCase().equals("r") || command[0].toLowerCase().equals("reset")) {
-			game.reset();
-			printGame();
-			return false;
-		}
-			else {
-			return switch (command[0].toLowerCase()) {
-			case "", "n", "none" -> game.none();
-		    case "w", "shockwave" -> game.shockwave();
-		    case "s", "shoot" -> game.shoot();
-		    case "l", "list" -> game.list();
-//		    case "r", "reset" -> game.reset(); // printGame(); return false;
-		    case "h", "help" -> game.help();
-		    case "e", "exit" -> game.exit();
-		    case "m", "move" -> moveHandler(command);
-		    default -> errorHandler(Messages.UNKNOWN_COMMAND);
-			};
-		}
-	}
-
-	private boolean moveHandler(String[] command) {
-		if (command.length < 2) {
-			return errorHandler(Messages.UNKNOWN_COMMAND);
-		} else {
-			return switch (command[1].toLowerCase()) {
-			case "lleft", "left", "right", "rright", "up", "down", "none" -> game.move(command[1].toLowerCase());
-			default -> invalidMovement(command[1]);
-			};
-		}
-	}
-	
-	private boolean errorHandler(String message) {
-		System.out.println(message);
-		return false;
-	}
-	
-	private boolean invalidMovement(String movement) {
-		System.out.print(Messages.DIRECTION_ERROR);
-		System.out.println(movement);
-		return false;
-	}
-
-	public static void commandError() {
-		System.out.println("command is misspelled, does not exist, or cannot be executed");
 	}
 }

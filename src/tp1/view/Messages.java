@@ -53,6 +53,8 @@ public class Messages {
 	public static final String HELP = String.join(System.lineSeparator(), HELP_LINES);
 
 	public static final String UNKNOWN_COMMAND = "Unknown command";
+	
+	public static final String HELP_AVAILABLE_COMMANDS = "Available commands:";
 
 	public static final String COMMAND_PARAMETERS_MISSING = "Missing parameters";
 
@@ -128,6 +130,47 @@ public class Messages {
 	public static final String UFO_DESCRIPTION = "U[f]o";
 	
 	public static final String EMPTY = "";
+	
+	public static final String COMMAND_EXIT_NAME = "exit";
+	public static final String COMMAND_EXIT_SHORTCUT = "e";
+	public static final String COMMAND_EXIT_DETAILS = "[e]xit";
+	public static final String COMMAND_EXIT_HELP = "exits the game";
+
+	public static final String COMMAND_HELP_NAME = "help";
+	public static final String COMMAND_HELP_SHORTCUT = "h";
+	public static final String COMMAND_HELP_DETAILS = "[h]elp";
+	public static final String COMMAND_HELP_HELP = "shows this help";
+	
+	public static final String COMMAND_LIST_NAME = "list";
+	public static final String COMMAND_LIST_SHORTCUT = "l";
+	public static final String COMMAND_LIST_DETAILS = "[l]ist";
+	public static final String COMMAND_LIST_HELP = "prints the list of current ships";
+	
+	public static final String COMMAND_MOVE_NAME = "move";
+	public static final String COMMAND_MOVE_SHORTCUT = "m";
+	public static final String COMMAND_MOVE_DETAILS = "[m]ove <left|lleft|right|rright>";
+	public static final String COMMAND_MOVE_HELP = "moves the UCMShip in the indicated direction";
+	
+	public static final String COMMAND_RESET_NAME = "reset";
+	public static final String COMMAND_RESET_SHORTCUT = "r";
+	public static final String COMMAND_RESET_DETAILS = "[r]eset";
+	public static final String COMMAND_RESET_HELP = "resets the game";
+
+	public static final String COMMAND_SHOCKWAVE_NAME = "shockwave";
+	public static final String COMMAND_SHOCKWAVE_SHORTCUT = "w";
+	public static final String COMMAND_SHOCKWAVE_DETAILS = "sock[w]ave";
+	public static final String COMMAND_SHOCKWAVE_HELP = "player shoots a shockwave";
+
+	public static final String COMMAND_SHOOT_NAME = "shoot";
+	public static final String COMMAND_SHOOT_SHORTCUT = "s";
+	public static final String COMMAND_SHOOT_DETAILS = "[s]hoot";
+	public static final String COMMAND_SHOOT_HELP = "player shoots a laser";
+
+	public static final String COMMAND_NONE_NAME = "none";
+	public static final String COMMAND_NONE_SHORTCUT = "n";
+	public static final String COMMAND_NONE_DETAILS = "[n]one";
+	public static final String COMMAND_NONE_HELP = "user does not perform any action";
+
 
 
 	/**
