@@ -7,15 +7,13 @@ import tp1.view.Messages;
 /**
  * Logic/schema for UCMShip, the object representing the player.
  */
-public class UCMShip implements Entity {
+public class UCMShip extends Ship {
 	
-	private Game game;
-	private Position position;
-	private int health = 3;
 	
 	public UCMShip(Game game) {
 		this.position = new Position(4, 7);
 		this.game = game;
+		health = Attributes.Player.endurance;
 	}
 	
 	public String getSymbol() {
@@ -24,10 +22,6 @@ public class UCMShip implements Entity {
 	
 	public int getHealth() {
 		return health;
-	}
-	
-	public Position getPosition() {
-		return position;
 	}
 	
 	public boolean automaticMove() {

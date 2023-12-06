@@ -10,37 +10,32 @@ import tp1.view.Messages;
  * Class implementing bombs, the projectiles produced by DestroyerAliens
  */
 
-public class Bomb implements Entity {
+public class Bomb extends EnemyWeapon {
 
-	private Position position;
 	private DestroyerAlien ship;
 	
 	public Bomb(DestroyerAlien ship) {
-		this.position = new Position(ship.getPosition());
 		this.ship = ship;
+		position = new Position(ship.getPosition());
 	}
 	
 	public String getSymbol() {
 		return Messages.BOMB_SYMBOL;
 	}
+	
+	public int getDamage() {
+		return Attributes.DestroyerAlien.damage;
+	}
 
-	public Position getPosition() {
-		return position;
-	}
-	
-	private void die() {
-		ship.enableBomb();
-	}
-	
 	public boolean reduceHealth(int damage) {
-		die();
+		ship.enableBomb();
 		return true;
 	}
 	
 	public boolean automaticMove() {
 		Position.update(position, Move.DOWN);
 		if(Position.outside(position)) {
-			die();
+			ship.enableBomb();
 			return false;
 		}
 		return true;

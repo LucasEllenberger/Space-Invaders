@@ -17,11 +17,15 @@ import tp1.logic.gameobjects.UCMShip;
 import tp1.logic.gameobjects.UCMLaser;
 import tp1.logic.gameobjects.Entity;
 import tp1.logic.gameobjects.RegularAlien;
+import tp1.logic.gameobjects.AlienShip;
 import tp1.logic.gameobjects.Attributes;
 import tp1.logic.gameobjects.Bomb;
 import tp1.logic.gameobjects.DestroyerAlien;
+import tp1.logic.gameobjects.EnemyShip;
+import tp1.logic.gameobjects.EnemyWeapon;
 import tp1.logic.gameobjects.Space;
 import tp1.logic.gameobjects.Ufo;
+import tp1.logic.gameobjects.Shockwave;
 import tp1.view.Messages;
 
 
@@ -42,6 +46,7 @@ public class Game {
 	private UCMShip player = new UCMShip(this);
 	private UCMLaser currentLaser;
 	private Ufo ufo = new Ufo(this);
+	private Shockwave shockwave = new Shockwave();
 	private Entity[][] board;
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Entity> temp = new ArrayList<Entity>();
@@ -303,8 +308,8 @@ public class Game {
 			Iterator<Entity> iterator = entities.iterator();
 			while (iterator.hasNext()) {
 				Entity entity = iterator.next();
-				if (entity instanceof RegularAlien || entity instanceof DestroyerAlien) {
-					if (entity.reduceHealth(1)) {
+				if (entity instanceof EnemyShip) {
+					if (entity.reduceHealth(shockwave.getDamage())) {
 						iterator.remove();
 					}
 				}
@@ -369,16 +374,14 @@ public class Game {
 	private void orienter() {
 		if (shouldMove()) {
 			if (state.get("edge")) {
-				RegularAlien.changeDirection(Move.DOWN);
-				DestroyerAlien.changeDirection(Move.DOWN);
+				AlienShip.changeDirection(Move.DOWN);
 				if (direction.equals(Move.LEFT)) {
 					direction = Move.RIGHT;
 				} else {
 					direction = Move.LEFT;
 				}
 			} else {
-				RegularAlien.changeDirection(direction);
-				DestroyerAlien.changeDirection(direction);
+				AlienShip.changeDirection(direction);
 			}
 		}
 	}
@@ -464,8 +467,8 @@ public class Game {
 	
 	private void resolvePlayer() {
 		Entity playerPosition = board[player.getPosition().getRow()][player.getPosition().getCol()];
-		if (playerPosition instanceof Bomb) {
-			player.reduceHealth(Attributes.DestroyerAlien.damage);
+		if (playerPosition instanceof EnemyWeapon) {
+			player.reduceHealth(((EnemyWeapon) playerPosition).getDamage());
 			playerPosition.reduceHealth(1);
 			remove(playerPosition);
 		}

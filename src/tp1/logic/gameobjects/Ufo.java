@@ -11,27 +11,24 @@ import tp1.view.Messages;
  * resetting positions and choosing whether to display it.
  */
 
-public class Ufo implements Entity{
+public class Ufo extends EnemyShip{
 
-	private Game game;
-	private Position position;
-	private int health = 1;
 
 	public Ufo(Game game) {
 		this.game = game;
+		health = Attributes.Ufo.endurance;
 	}
 
 	public String getSymbol() {
 		return String.format(Messages.GAME_OBJECT_STATUS, Messages.UFO_SYMBOL, health);
 	}
 
-	public Position getPosition() {
-		return position;
-	}
-	
-	private void die() {
+	protected void die() {
 		game.changeState("ufo", false);
 		game.remove(this);
+		position = null;
+		game.changeMetric("points", getPoints());
+		game.changeState("shockwave", true);
 	}
 	
 	public boolean automaticMove() {
@@ -43,16 +40,8 @@ public class Ufo implements Entity{
 		return true;
 	}
 	
-	public boolean reduceHealth(int damage) {
-		health -= damage;
-		if (health <= 0) {
-			position = null;
-			game.changeMetric("points", Attributes.Ufo.points);
-			game.changeState("shockwave", true);
-			die();
-			return true;
-		}
-		return false;
+	protected int getPoints() {
+		return Attributes.Ufo.points;
 	}
 	
 	/**

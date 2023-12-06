@@ -8,16 +8,13 @@ import tp1.view.Messages;
 /**
  * Logic/schema describing Regular Aliens
  */
-public class RegularAlien implements Entity{
-	
-	private static Move direction = Move.LEFT;
-	private Game game;
-	private Position position;
-	private int health = 2;
+public class RegularAlien extends AlienShip {
+
 	
 	public RegularAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		health = Attributes.RegularAlien.endurance;
 		game.changeMetric("aliens", 1);
 		game.add(this);
 	}
@@ -26,31 +23,9 @@ public class RegularAlien implements Entity{
 		return String.format(Messages.GAME_OBJECT_STATUS, Messages.REGULAR_ALIEN_SYMBOL, health);
 	}
 	
-	public Position getPosition() {
-		return position;
-	}
+	protected void die() {}
 	
-	public static void changeDirection(Move move) {
-		direction = move;
-	}
-
-	public boolean automaticMove() {
-		if (game.shouldMove()) {
-			Position.update(position, direction);
-			if (Position.onBorder(position) && !direction.equals(Move.DOWN)) {
-				game.changeState("edge", true);
-			}
-		}
-		return true;
-	}
-	
-	public boolean reduceHealth(int damage)  {
-		this.health -= damage;
-		if (health <= 0) {
-			game.changeMetric("points", Attributes.RegularAlien.points);
-			game.changeMetric("aliens", -1);
-			return true;
-		}
-		return false;
+	protected int getPoints() {
+		return Attributes.RegularAlien.points;
 	}
 }

@@ -9,10 +9,8 @@ import tp1.view.Messages;
  *  Logic/schema for UCMLasers, the projectiles produced by UCMShip
  *
  */
-public class UCMLaser implements Entity{
+public class UCMLaser extends UCMWeapon{
 
-	private Game game;
-	private Position position;
 	
 	public UCMLaser(UCMShip ship, Game game) {
 		this.game = game;
@@ -24,10 +22,6 @@ public class UCMLaser implements Entity{
 		return Messages.LASER_SYMBOL;
 	}
 
-	public Position getPosition() {
-		return position;
-	}
-	
 	public boolean reduceHealth(int damage) {
 		die();
 		return true;
@@ -45,6 +39,10 @@ public class UCMLaser implements Entity{
 			return false;
 		}
 		return true;
+	}
+	
+	public int getDamage() {
+		return Attributes.Player.damage;
 	}
 
 	/**

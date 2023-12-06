@@ -9,18 +9,15 @@ import tp1.view.Messages;
  * Logic/schema describing Destroyer Aliens
  */
 
-public class DestroyerAlien implements Entity{
+public class DestroyerAlien extends AlienShip{
 
-	private static Move direction = Move.LEFT;
 	private Bomb currBomb;
-	private Game game;
-	private Position position;
-	private int health = 1;
 	private boolean canBomb = true;
 	
 	public DestroyerAlien(Game game, Position position) {
 		this.game = game;
 		this.position = position;
+		health = Attributes.DestroyerAlien.endurance;
 		game.changeMetric("aliens", 1);
 		game.add(this);
 	}
@@ -29,18 +26,11 @@ public class DestroyerAlien implements Entity{
 		return String.format(Messages.GAME_OBJECT_STATUS, Messages.DESTROYER_ALIEN_SYMBOL, health);
 	}
 	
-	public Position getPosition() {
-		return position;
-	}
-	
-	public static void changeDirection(Move move) {
-		direction = move;
-	}
-	
 	public void enableBomb() {
 		canBomb = true;
 	}
 	
+	@Override
 	public boolean automaticMove() {
 		if (game.shouldMove()) {
 			Position.update(position, direction);
@@ -52,17 +42,11 @@ public class DestroyerAlien implements Entity{
 		return true;
 	}
 	
-	public boolean reduceHealth(int damage)  {
-		this.health -= damage;
-		if (health <= 0) {
-			game.changeMetric("points", Attributes.DestroyerAlien.points);
-			game.changeMetric("aliens", -1);
-			return true;
-		}
-		return false;
+	protected int getPoints() {
+		return Attributes.DestroyerAlien.points;
 	}
 	
-	
+	protected void die() {}
 	/**
 	 * Attempts to spawn a bomb from the reference ship
 	 */

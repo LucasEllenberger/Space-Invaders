@@ -1,18 +1,27 @@
 package tp1.logic.gameobjects;
 
+import tp1.logic.Game;
 import tp1.logic.Position;
 
 /**
  * An interface that encapsulates anything that would go on the board to varying degrees
  */
 
-public interface Entity {
+public abstract class Entity {
 	
-    String getSymbol();
+	protected Position position;
+	
+	protected Game game;
+	
+	protected int health;
+	
+    public abstract String getSymbol();
 
-    Position getPosition();
+    public Position getPosition() {
+    	return position;
+    }
     
-    boolean automaticMove();
+    public abstract boolean automaticMove();
     
-    boolean reduceHealth(int damage);
+    public abstract boolean reduceHealth(int damage);
 }
